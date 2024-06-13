@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savoir/features/auth/view/login_view.dart';
+import 'package:savoir/firebase_options.dart';
+import 'package:savoir/router.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const ProviderScope(child: App()));
 }
 
 class App extends StatelessWidget {
@@ -13,14 +22,11 @@ class App extends StatelessWidget {
       title: 'Savoir',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello, World!'),
-        ),
-      ),
+      home: const LoginView(),
+      onGenerateRoute: AppRouter.generateRoutes,
     );
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803276036259",
+    "project_id": "savoir-2482b",
+    "storage_bucket": "savoir-2482b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803276036259:android:653e0070611f8d3ad2c716",
+        "android_client_info": {
+          "package_name": "com.savoir.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo04aqmxsfmWu5ldQhqZB-C2vUYhoBC1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
