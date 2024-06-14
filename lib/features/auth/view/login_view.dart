@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
@@ -17,6 +17,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _usernameOrEmail = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
 
   @override
   void dispose() {
@@ -49,20 +50,37 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Welcome back",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Nombre de usuario o correo",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 12),
                     TextInput(
                       controller: _usernameOrEmail,
-                      hintText: "Username or Email",
+                      hintText: "Nombre de usuario o correo",
                       keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 16),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Contraseña",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     TextInput(
                       controller: _password,
-                      hintText: "Password",
+                      hintText: "******",
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
                     ),
@@ -70,31 +88,57 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, AppRouter.signup);
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Checkbox(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  _rememberMe = value!;
+                                });
+                              },
+                            ),
+                            const Text(
+                              "Recuérdame",
+                              style: TextStyle(
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushReplacementNamed(context, AppRouter.passwordReset);
                           },
-                          child: const Text("Sign up"),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "¿Olvidaste tu contraseña?",
+                              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, AppRouter.passwordReset);
-                      },
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "Forgot password?",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ),
-                    ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () => attemptLogin(),
-                      child: const Text("Login"),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: (_usernameOrEmail.text.isEmpty || _password.text.isEmpty)
+                            ? null
+                            : () {
+                                attemptLogin();
+                              },
+                        style: TextButton.styleFrom(
+                          disabledForegroundColor: Colors.white,
+                          disabledBackgroundColor: AppTheme.disabledColor,
+                        ),
+                        child: const Text("Login"),
+                      ),
                     ),
                   ],
                 ),

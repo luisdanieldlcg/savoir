@@ -50,11 +50,6 @@ class _SignupViewState extends ConsumerState<SignupView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Create an account",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
-                    const SizedBox(height: 30),
                     TextInput(
                       controller: _username,
                       hintText: "Username",

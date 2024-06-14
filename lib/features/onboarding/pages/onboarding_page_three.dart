@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:savoir/router.dart';
 
 class OnboardingPageThree extends StatelessWidget {
   const OnboardingPageThree({super.key});
@@ -34,7 +35,7 @@ class OnboardingPageThree extends StatelessWidget {
                 height: 45,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushReplacementNamed(context, AppRouter.welcome);
                   },
                   child: Text("Continuar"),
                 ),

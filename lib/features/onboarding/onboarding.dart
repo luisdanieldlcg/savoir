@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/onboarding/pages/onboarding_page_one.dart';
 import 'package:savoir/features/onboarding/pages/onboarding_page_three.dart';
 import 'package:savoir/features/onboarding/pages/onboarding_page_two.dart';
+import 'package:savoir/router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding extends StatefulWidget {
@@ -30,7 +30,6 @@ class _OnboardingState extends State<Onboarding> {
       body: Stack(
         children: [
           // add skip button at the top left
-
           PageView(
             controller: _pageController,
             children: const [
@@ -44,40 +43,44 @@ class _OnboardingState extends State<Onboarding> {
           ),
 
           // ================== Not shown if above of the page view ==================
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            alignment: const Alignment(-1, -0.9),
-            child: Opacity(
-              opacity: _currentPage == 2 ? 0 : 1,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: const Text(
-                  'Saltar',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+          _currentPage == 2
+              ? const SizedBox.shrink()
+              : SafeArea(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    alignment: const Alignment(-1, -1.0),
+                    child: Opacity(
+                      opacity: _currentPage == 2 ? 0 : 1,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, AppRouter.welcome);
+                        },
+                        child: const Text(
+                          'Saltar',
+                          style:
+                              TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
 
           Container(
             alignment: const Alignment(0, 0.85),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Opacity(
-                  opacity: _currentPage == 0 ? 0 : 1,
-                  child: IconButton(
-                    onPressed: () {
-                      _pageController.previousPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    icon: const Icon(Icons.arrow_back, color: AppTheme.primaryColor),
-                  ),
-                ),
+                _currentPage == 0
+                    ? const SizedBox(width: 46)
+                    : IconButton(
+                        onPressed: () {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        icon: const Icon(Icons.arrow_back, color: AppTheme.primaryColor),
+                      ),
                 SmoothPageIndicator(
                     controller: _pageController,
                     count: 3,
