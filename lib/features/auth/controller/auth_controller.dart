@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
@@ -72,6 +71,34 @@ class AuthController extends StateNotifier<bool> {
         errorAlert(
           context: context,
           title: 'Login failed',
+          text: message,
+        );
+      },
+    );
+    state = false;
+  }
+
+  void resetPassword({
+    required BuildContext context,
+    required String email,
+  }) async {
+    state = true;
+    await Future.delayed(const Duration(seconds: 2));
+    await _repository.resetPassword(
+      email: email,
+      onSuccess: () {
+        _logger.i("Password reset email sent");
+        successAlert(
+          context: context,
+          title: 'Password reset email sent',
+          text: 'Please check your email for further instructions',
+        );
+      },
+      onError: (message) {
+        _logger.e("Error sending password reset email: $message");
+        errorAlert(
+          context: context,
+          title: 'Password reset failed',
           text: message,
         );
       },

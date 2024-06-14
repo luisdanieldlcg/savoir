@@ -87,4 +87,32 @@ class AuthRepository {
       _logger.e("Error registering user: $e");
     }
   }
+
+  Future<void> resetPassword({
+    required String email,
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    try {
+      _logger.i("Resetting password for email: $email");
+      await _auth.sendPasswordResetEmail(email: email);
+      onSuccess();
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          onError("The email is not valid");
+          break;
+        case 'user-not-found':
+          onError("The account does not exist");
+          break;
+        default:
+          onError("Something went wrong. Please try again or contact support");
+          break;
+      }
+      _logger.e("Error resetting password: ${e.message}");
+    } catch (e) {
+      onError("Something went wrong. Please try again or contact support");
+      _logger.e("Error resetting password: $e");
+    }
+  }
 }

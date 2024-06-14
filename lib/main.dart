@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/firebase_options.dart';
 import 'package:savoir/router.dart';
@@ -22,7 +23,19 @@ class App extends StatelessWidget {
       title: 'Savoir',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: const TextStyle(
+            color: AppTheme.labelTextColor,
+            fontStyle: FontStyle.italic,
+            fontSize: 14,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        colorScheme: const ColorScheme.light(
+          primary: AppTheme.primaryColor,
+        ),
         useMaterial3: true,
       ),
       home: const LoginView(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextInput extends StatelessWidget {
-  final String labelText;
+  final String hintText;
   final TextEditingController? controller;
   final String? Function(String)? validator;
   final bool obscureText;
@@ -9,7 +9,7 @@ class TextInput extends StatelessWidget {
 
   const TextInput({
     super.key,
-    required this.labelText,
+    required this.hintText,
     this.controller,
     this.validator,
     this.obscureText = false,
@@ -23,7 +23,7 @@ class TextInput extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        labelText: labelText,
+        hintText: hintText,
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {

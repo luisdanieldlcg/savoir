@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
 import 'package:savoir/router.dart';
@@ -40,10 +41,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
     return Scaffold(
       body: isLoading
-          ? const SpinKitPulse(
-              color: Colors.red,
-              size: 128,
-            )
+          ? const PulseProgressIndicator()
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Form(
@@ -58,13 +56,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     const SizedBox(height: 30),
                     TextInput(
                       controller: _usernameOrEmail,
-                      labelText: "Username or Email",
+                      hintText: "Username or Email",
                       keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 16),
                     TextInput(
                       controller: _password,
-                      labelText: "Password",
+                      hintText: "Password",
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
                     ),
@@ -80,6 +78,18 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           child: const Text("Sign up"),
                         ),
                       ],
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, AppRouter.passwordReset);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "Forgot password?",
+                          style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
