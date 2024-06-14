@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/firebase_options.dart';
+import 'package:savoir/features/onboarding/onboarding.dart';
 import 'package:savoir/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,6 +25,7 @@ class App extends StatelessWidget {
       title: 'Savoir',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        textTheme: GoogleFonts.interTextTheme(  ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: const TextStyle(
             color: AppTheme.labelTextColor,
@@ -33,12 +36,21 @@ class App extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: AppTheme.primaryColor,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
         colorScheme: const ColorScheme.light(
           primary: AppTheme.primaryColor,
         ),
         useMaterial3: true,
       ),
-      home: const LoginView(),
+      home: const Onboarding(),
       onGenerateRoute: AppRouter.generateRoutes,
     );
   }
