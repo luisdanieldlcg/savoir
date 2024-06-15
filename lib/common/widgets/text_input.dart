@@ -28,19 +28,26 @@ class TextInput extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {
         if (value!.trim().isEmpty) {
-          return "This field is required";
+          return "Este campo es requerido";
         }
 
         if (keyboardType == TextInputType.emailAddress) {
           final emailRegex = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
           if (!emailRegex.hasMatch(value)) {
-            return "Invalid email address";
+            return "Correo electrónico inválido";
           }
         }
 
         if (keyboardType == TextInputType.visiblePassword) {
           if (value.length < 6) {
-            return "Password must be at least 6 characters long";
+            return "La contraseña debe tener al menos 6 caracteres";
+          }
+        }
+
+        if (keyboardType == TextInputType.phone) {
+          final phoneRegex = RegExp(r"^\d{10}$");
+          if (!phoneRegex.hasMatch(value)) {
+            return "Número de teléfono inválido";
           }
         }
 

@@ -4,7 +4,7 @@ import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
-import 'package:savoir/router.dart';
+import 'package:savoir/features/auth/view/password_reset_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -18,6 +18,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
+  bool _buttonEnabled = false;
 
   @override
   void dispose() {
@@ -47,6 +48,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Form(
                 key: _formKey,
+                onChanged: () {
+                  setState(() {
+                    _buttonEnabled = _formKey.currentState!.validate();
+                  });
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -112,7 +118,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, AppRouter.passwordReset);
+                            openRecoveryModal(context);
                           },
                           child: Align(
                             alignment: Alignment.centerRight,
@@ -128,15 +134,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: (_usernameOrEmail.text.isEmpty || _password.text.isEmpty)
-                            ? null
-                            : () {
-                                attemptLogin();
-                              },
-                        style: TextButton.styleFrom(
-                          disabledForegroundColor: Colors.white,
-                          disabledBackgroundColor: AppTheme.disabledColor,
-                        ),
+                        onPressed: _buttonEnabled ? () => attemptLogin() : null,
                         child: const Text("Login"),
                       ),
                     ),
@@ -146,4 +144,47 @@ class _LoginViewState extends ConsumerState<LoginView> {
             ),
     );
   }
+}
+
+void openRecoveryModal(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.of(context).size.height * 0.75,
+    ),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+    builder: (context) {
+      return DefaultTabController(
+        length: 1,
+        child: Column(
+          children: const [
+            TabBar(
+              labelStyle: TextStyle(
+                fontSize: 16,
+              ),
+              dividerColor: Colors.transparent,
+              tabs: [
+                Tab(
+                  text: "Recuperar contraseña",
+                ),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  PasswordResetView(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

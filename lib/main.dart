@@ -47,6 +47,8 @@ class App extends StatelessWidget {
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
+            disabledBackgroundColor: AppTheme.disabledColor,
+            disabledForegroundColor: Colors.white,
             backgroundColor: AppTheme.primaryColor,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(

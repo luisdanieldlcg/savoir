@@ -1,13 +1,16 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:savoir/features/auth/controller/auth_controller.dart';
 import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/features/auth/view/signup_view.dart';
 
-class WelcomeView extends StatelessWidget {
+class WelcomeView extends ConsumerWidget {
   const WelcomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
         child: Padding(
@@ -31,14 +34,15 @@ class WelcomeView extends StatelessWidget {
                   const Text("Antes de disfrutar de los servicios, Por favor regístrese primero",
                       textAlign: TextAlign.center),
                   const SizedBox(height: 35),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 45,
                     child: TextButton(
                       onPressed: () {
-                        openModal(context);
+                        openModal(context, 0, ref);
                       },
-                      child: const Text("Crear cuenta"),
+                      child: const Text("Iniciar Sesión"),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -47,9 +51,9 @@ class WelcomeView extends StatelessWidget {
                     height: 45,
                     child: OutlinedButton(
                       onPressed: () {
-                        openModal(context);
+                        openModal(context, 1, ref);
                       },
-                      child: const Text("Iniciar Sesión"),
+                      child: const Text("Crear cuenta"),
                     ),
                   ),
                 ],
@@ -61,11 +65,11 @@ class WelcomeView extends StatelessWidget {
     );
   }
 
-  void openModal(BuildContext context) {
+  void openModal(BuildContext context, int initialIndex, WidgetRef ref) {
     showModalBottomSheet(
       isScrollControlled: true,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
+        maxHeight: MediaQuery.of(context).size.height * 0.75,
       ),
       context: context,
       shape: const RoundedRectangleBorder(
@@ -74,37 +78,52 @@ class WelcomeView extends StatelessWidget {
           topRight: Radius.circular(20),
         ),
       ),
-      builder: (context) {
-        return const DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              TabBar(
-                labelStyle: TextStyle(
-                  fontSize: 16,
+      builder: (context) => _AuthModal(initialIndex: initialIndex),
+    );
+  }
+}
+
+class _AuthModal extends ConsumerWidget {
+  final int initialIndex;
+  const _AuthModal({
+    required this.initialIndex,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DefaultTabController(
+      length: 2,
+      initialIndex: initialIndex,
+      child: IgnorePointer(
+        ignoring: ref.watch(authControllerProvider),
+        child: Column(
+          children: const [
+            TabBar(
+              indicatorWeight: 4,
+              labelStyle: TextStyle(
+                fontSize: 16,
+              ),
+              dividerColor: Colors.transparent,
+              tabs: [
+                Tab(
+                  text: "Iniciar Sesión",
                 ),
-                dividerColor: Colors.transparent,
-                tabs: [
-                  Tab(
-                    text: "Iniciar Sesión",
-                  ),
-                  Tab(
-                    text: "Crear cuenta",
-                  ),
+                Tab(
+                  text: "Crear cuenta",
+                ),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  LoginView(),
+                  SignupView(),
                 ],
               ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    LoginView(),
-                    SignupView(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

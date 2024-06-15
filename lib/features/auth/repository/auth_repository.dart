@@ -1,22 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
+import 'package:savoir/features/auth/model/user_model.dart';
 
 final authRepositoryProvider = Provider((ref) {
-  return AuthRepository(auth: ref.read(authProvider));
+  return AuthRepository(
+    auth: ref.read(authProvider),
+    database: ref.read(databaseProvider),
+  );
 });
 
 class AuthRepository {
   final FirebaseAuth _auth;
+  final FirebaseFirestore _database;
 
   static final Logger _logger = AppLogger.getLogger(AuthRepository);
 
   const AuthRepository({
     required FirebaseAuth auth,
-  }) : _auth = auth;
+    required FirebaseFirestore database,
+  })  : _auth = auth,
+        _database = database;
 
   Future<void> register({
     required String email,
@@ -26,10 +34,22 @@ class AuthRepository {
   }) async {
     try {
       _logger.i("Registering user with email: $email");
-      final _ = await _auth.createUserWithEmailAndPassword(
+      final credentials = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      final loggedInUser = credentials.user;
+      if (loggedInUser == null) {
+        onError("Something went wrong. Please try again or contact support");
+        return;
+      }
+
+      final user = UserModel(
+        uid: loggedInUser.uid,
+        email: email,
+      );
+      await _database.collection('users').doc(loggedInUser.uid).set(user.toMap());
       onSuccess();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {

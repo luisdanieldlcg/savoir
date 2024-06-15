@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
+import 'package:savoir/router.dart';
 
 final authControllerProvider = StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(repository: ref.read(authRepositoryProvider));
@@ -30,11 +31,16 @@ class AuthController extends StateNotifier<bool> {
       password: password,
       onSuccess: () {
         _logger.i("User registered successfully");
-        successAlert(
-          context: context,
-          title: 'Registration successful',
-          text: 'You have successfully registered',
-        );
+        Navigator.pushNamedAndRemoveUntil(context, AppRouter.home, (route) => false);
+        // successAlert(
+        //   context: context,
+        //   title: 'R
+        //gistration successful',
+        //   text: 'You have successfully registered',
+        //   onConfirm: () {
+
+        //   },
+        // );
       },
       onError: (message) {
         _logger.e("Error registering user: $message");

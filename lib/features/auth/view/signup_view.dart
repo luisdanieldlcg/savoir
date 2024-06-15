@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
-import 'package:savoir/router.dart';
 
 class SignupView extends ConsumerStatefulWidget {
   const SignupView({super.key});
@@ -16,13 +14,16 @@ class SignupView extends ConsumerStatefulWidget {
 class _SignupViewState extends ConsumerState<SignupView> {
   final _username = TextEditingController();
   final _email = TextEditingController();
+  final _phoneNumber = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _buttonEnabled = false;
 
   @override
   void dispose() {
     _username.dispose();
     _email.dispose();
+    _phoneNumber.dispose();
     _password.dispose();
     super.dispose();
   }
@@ -45,47 +46,84 @@ class _SignupViewState extends ConsumerState<SignupView> {
           ? const PulseProgressIndicator()
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextInput(
-                      controller: _username,
-                      hintText: "Username",
-                      keyboardType: TextInputType.name,
-                    ),
-                    TextInput(
-                      controller: _email,
-                      hintText: "Email",
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    TextInput(
-                      controller: _password,
-                      hintText: "Password",
-                      obscureText: true,
-                      keyboardType: TextInputType.visiblePassword,
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Already have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, AppRouter.login);
-                          },
-                          child: const Text("Login"),
+              child: SafeArea(
+                child: Form(
+                  key: _formKey,
+                  onChanged: () {
+                    setState(() {
+                      _buttonEnabled = _formKey.currentState!.validate();
+                    });
+                  },
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 44),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Nombre de usuario",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () => attemptSignup(),
-                      child: const Text("Sign up"),
-                    ),
-                  ],
+                      ),
+                      const SizedBox(height: 10),
+                      TextInput(
+                        controller: _username,
+                        hintText: "Luis De La Cruz",
+                        keyboardType: TextInputType.name,
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Correo electrónico",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextInput(
+                        controller: _email,
+                        hintText: "ejemplo@email.com",
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Teléfono",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextInput(
+                        controller: _phoneNumber,
+                        hintText: "123-456-7890",
+                        obscureText: true,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Contraseña",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextInput(
+                        controller: _password,
+                        hintText: "Ingrese al menos 6 caracteres",
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: _buttonEnabled ? () => attemptSignup() : null,
+                          child: const Text("Registrarse"),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

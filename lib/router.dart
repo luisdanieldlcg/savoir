@@ -3,12 +3,14 @@ import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/features/auth/view/password_reset_view.dart';
 import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
+import 'package:savoir/features/home.dart';
 
 class AppRouter {
   static const login = "/login";
   static const signup = "/signup";
   static const passwordReset = "/password-reset";
   static const welcome = "/welcome";
+  static const home = "/home";
 
   static Route<Widget> generateRoutes(RouteSettings settings) {
     final name = settings.name;
@@ -21,6 +23,8 @@ class AppRouter {
         return _createRoute(const PasswordResetView());
       case welcome:
         return _createRoute(const WelcomeView());
+      case home:
+        return _createRoute(const Home());
       default:
         return _createRoute(UnknownRouteScreen(targetRoute: name));
     }
