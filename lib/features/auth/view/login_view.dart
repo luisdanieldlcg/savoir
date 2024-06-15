@@ -53,9 +53,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     _buttonEnabled = _formKey.currentState!.validate();
                   });
                 },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
                   children: [
+                    const SizedBox(height: 44),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

@@ -6,6 +6,7 @@ import 'package:savoir/firebase_options.dart';
 import 'package:savoir/features/onboarding/onboarding.dart';
 import 'package:savoir/router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:savoir/startup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,12 +57,17 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+          selectedItemColor: AppTheme.primaryColor,
+        ),
         colorScheme: const ColorScheme.light(
           primary: AppTheme.primaryColor,
         ),
         useMaterial3: true,
       ),
-      home: const Onboarding(),
+      home: const StartUp(),
       onGenerateRoute: AppRouter.generateRoutes,
     );
   }

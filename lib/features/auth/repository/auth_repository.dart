@@ -7,11 +7,17 @@ import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
 
+/// Provider to provide the [AuthRepository] instance
 final authRepositoryProvider = Provider((ref) {
   return AuthRepository(
     auth: ref.read(authProvider),
     database: ref.read(databaseProvider),
   );
+});
+
+/// Provider to listen to the authentication state changes
+final authStateProvider = StreamProvider((ref) {
+  return ref.watch(authProvider).authStateChanges();
 });
 
 class AuthRepository {

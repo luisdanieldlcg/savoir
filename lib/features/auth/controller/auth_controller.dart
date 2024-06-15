@@ -32,15 +32,6 @@ class AuthController extends StateNotifier<bool> {
       onSuccess: () {
         _logger.i("User registered successfully");
         Navigator.pushNamedAndRemoveUntil(context, AppRouter.home, (route) => false);
-        // successAlert(
-        //   context: context,
-        //   title: 'R
-        //gistration successful',
-        //   text: 'You have successfully registered',
-        //   onConfirm: () {
-
-        //   },
-        // );
       },
       onError: (message) {
         _logger.e("Error registering user: $message");
@@ -66,11 +57,7 @@ class AuthController extends StateNotifier<bool> {
       password: password,
       onSuccess: () {
         _logger.i("User logged in successfully");
-        successAlert(
-          context: context,
-          title: 'Login successful',
-          text: 'You have successfully logged in',
-        );
+        Navigator.pushNamedAndRemoveUntil(context, AppRouter.home, (route) => false);
       },
       onError: (message) {
         _logger.e("Error registering user: $message");
