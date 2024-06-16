@@ -34,6 +34,8 @@ class _SignupViewState extends ConsumerState<SignupView> {
             context: context,
             email: _email.text,
             password: _password.text,
+            username: _username.text,
+            phone: _phoneNumber.text,
           );
     }
   }

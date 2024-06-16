@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
@@ -11,7 +11,7 @@ import 'package:savoir/features/auth/model/user_model.dart';
 final authRepositoryProvider = Provider((ref) {
   return AuthRepository(
     auth: ref.read(authProvider),
-    database: ref.read(databaseProvider),
+    database: ref.read(databaseRepositoryProvider),
   );
 });
 
@@ -22,19 +22,21 @@ final authStateProvider = StreamProvider((ref) {
 
 class AuthRepository {
   final FirebaseAuth _auth;
-  final FirebaseFirestore _database;
+  final DatabaseRepository _database;
 
   static final Logger _logger = AppLogger.getLogger(AuthRepository);
 
   const AuthRepository({
     required FirebaseAuth auth,
-    required FirebaseFirestore database,
+    required DatabaseRepository database,
   })  : _auth = auth,
         _database = database;
 
   Future<void> register({
     required String email,
     required String password,
+    required String username,
+    required String phone,
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) async {
@@ -54,8 +56,10 @@ class AuthRepository {
       final user = UserModel(
         uid: loggedInUser.uid,
         email: email,
+        username: username,
+        phoneNumber: phone,
       );
-      await _database.collection('users').doc(loggedInUser.uid).set(user.toMap());
+      await _database.user(loggedInUser.uid).set(user);
       onSuccess();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -82,16 +86,16 @@ class AuthRepository {
   Future<void> logIn({
     required String email,
     required String password,
-    required VoidCallback onSuccess,
+    required Function(String) onSuccess,
     required Function(String) onError,
   }) async {
     try {
       _logger.i("Registering user with email: $email");
-      final _ = await _auth.signInWithEmailAndPassword(
+      final credentials = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      onSuccess();
+      onSuccess(credentials.user!.uid);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'invalid-credential':
@@ -139,6 +143,15 @@ class AuthRepository {
     } catch (e) {
       onError("Something went wrong. Please try again or contact support");
       _logger.e("Error resetting password: $e");
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      _logger.i("Logging out user");
+      await _auth.signOut();
+    } catch (e) {
+      _logger.e("Error logging out user: $e");
     }
   }
 }

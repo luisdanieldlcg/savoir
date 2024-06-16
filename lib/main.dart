@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/firebase_options.dart';
-import 'package:savoir/features/onboarding/onboarding.dart';
 import 'package:savoir/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:savoir/startup.dart';

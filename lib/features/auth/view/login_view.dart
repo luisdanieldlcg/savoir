@@ -33,6 +33,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
             context: context,
             email: _usernameOrEmail.text,
             password: _password.text,
+            ref: ref,
           );
     }
   }
