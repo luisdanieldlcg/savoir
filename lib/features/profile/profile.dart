@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/router.dart';
 
 class Profile extends ConsumerWidget {
@@ -11,39 +12,37 @@ class Profile extends ConsumerWidget {
     {
       "title": "Datos Personales",
       "icon": Icons.person,
-      "onTap": (ctx) {
-        Navigator.of(ctx).pushNamed(AppRouter.personalDetails);
-      },
+      "route": AppRouter.personalDetails,
     },
     {
       "title": "Métodos de pago",
       "icon": Icons.credit_card,
-      "onTap": (ctx) {},
+      "route": AppRouter.home,
     },
     {
       "title": "Preferencias de comida",
       "icon": Icons.fastfood,
-      "onTap": (ctx) {},
+      "route": AppRouter.home,
     },
     {
       "title": "Ver estadísticas",
       "icon": Icons.bar_chart,
-      "onTap": (ctx) {},
+      "route": AppRouter.home,
     },
     {
       "title": "Favoritos",
       "icon": Icons.favorite,
-      "onTap": (ctx) {},
+      "route": AppRouter.home,
     },
     {
       "title": "Configuración",
       "icon": Icons.settings,
-      "onTap": (ctx) {},
+      "route": AppRouter.home,
     },
     {
       "title": "Cerrar Sesión",
       "icon": Icons.exit_to_app_rounded,
-      "onTap": (ctx) {},
+      "route": AppRouter.welcome,
     },
   ];
 
@@ -58,12 +57,15 @@ class Profile extends ConsumerWidget {
             children: [
               const SizedBox(height: 40),
               CircleAvatar(
-                radius: 64,
+                radius: 62,
                 backgroundColor: AppTheme.primaryColor,
                 child: ClipOval(
                   child: SizedBox.fromSize(
                     size: const Size.fromRadius(60),
-                    child: Image.asset('assets/images/default-avatar.jpg'),
+                    child: Image.network(
+                      user!.profilePicture,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -124,7 +126,19 @@ class Profile extends ConsumerWidget {
                                     size: 18,
                                   ),
                                   onTap: () {
-                                    (setting["onTap"] as void Function(BuildContext))(context);
+                                    if (setting["route"] == AppRouter.welcome) {
+                                      ref.watch(authRepositoryProvider).logOut();
+                                      Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        setting["route"] as String,
+                                        (route) => false,
+                                      );
+                                    } else {
+                                      Navigator.pushNamed(
+                                        context,
+                                        setting["route"] as String,
+                                      );
+                                    }
                                   },
                                 ),
                                 Divider(
@@ -141,12 +155,6 @@ class Profile extends ConsumerWidget {
                   ),
                 ],
               )
-              // TextButton(
-              //   onPressed: () async {
-              //     await ref.watch(authRepositoryProvider).logOut();
-              //   },
-              //   child: Text("Logout"),
-              // ),
             ],
           ),
         ),

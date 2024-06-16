@@ -6,14 +6,20 @@ class TextInput extends StatelessWidget {
   final String? Function(String)? validator;
   final bool obscureText;
   final TextInputType keyboardType;
+  final InputDecoration? decoration;
+  final VoidCallback? onTap;
+  final bool readOnly;
 
   const TextInput({
     super.key,
-    required this.hintText,
+    this.hintText = "",
     this.controller,
     this.validator,
     this.obscureText = false,
     required this.keyboardType,
+    this.decoration,
+    this.onTap,
+    this.readOnly = false,
   });
 
   @override
@@ -22,9 +28,9 @@ class TextInput extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
-      decoration: InputDecoration(
-        hintText: hintText,
-      ),
+      onTap: onTap,
+      readOnly: readOnly,
+      decoration: decoration ?? InputDecoration(hintText: hintText),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {
         if (value!.trim().isEmpty) {

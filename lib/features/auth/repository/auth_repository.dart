@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
@@ -46,20 +47,26 @@ class AuthRepository {
         email: email,
         password: password,
       );
-
       final loggedInUser = credentials.user;
       if (loggedInUser == null) {
         onError("Something went wrong. Please try again or contact support");
         return;
       }
-
       final user = UserModel(
         uid: loggedInUser.uid,
         email: email,
         username: username,
         phoneNumber: phone,
+        firstName: "",
+        lastName: "",
+        profilePicture: kDefaultAvatarImage,
+        birthDate: DateTime.now(),
+        genre: "",
+        profileComplete: false,
       );
+
       await _database.user(loggedInUser.uid).set(user);
+
       onSuccess();
     } on FirebaseAuthException catch (e) {
       switch (e.code) {

@@ -26,4 +26,8 @@ class DatabaseRepository {
   Future<UserModel?> readUser(String uid) {
     return user(uid).get().then((snapshot) => snapshot.data());
   }
+
+  Future<void> updateUser(UserModel model) {
+    return user(model.uid).set(model);
+  }
 }

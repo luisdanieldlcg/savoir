@@ -5,6 +5,7 @@ import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/personal_details_page.dart';
+import 'package:savoir/startup.dart';
 
 class AppRouter {
   static const login = "/login";
@@ -28,7 +29,7 @@ class AppRouter {
       case home:
         return _createRoute(const Home());
       case personalDetails:
-        return _createRoute(const PersonalDetailsView());
+        return _createRoute(const PersonalDetailsView(firstTime: false));
       default:
         return _createRoute(UnknownRouteScreen(targetRoute: name));
     }
@@ -37,6 +38,12 @@ class AppRouter {
   static Route<Widget> _createRoute(Widget child) {
     return MaterialPageRoute<Widget>(
       builder: (_) => child,
+    );
+  }
+
+  static Route<Widget> startUp() {
+    return MaterialPageRoute<Widget>(
+      builder: (_) => const StartUp(),
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/onboarding/onboarding.dart';
+import 'package:savoir/features/profile/view/personal_details_page.dart';
 
 final startUpProvider = FutureProvider.family<UserModel?, String>((ref, uid) async {
   final database = ref.watch(databaseRepositoryProvider);
@@ -41,6 +42,11 @@ class StartUp extends ConsumerWidget {
             }
             _logger.i("The user is authenticated. Redirecting to home screen.");
             _logger.i("User: ${user.toMap()}");
+
+            if (!user.profileComplete) {
+              _logger.i("The user profile is not complete. Redirecting to profile details screen.");
+              return const PersonalDetailsView(firstTime: true);
+            }
             return const Home();
           },
           loading: () {

@@ -1,12 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
 
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
+
+class _Utils {}
+
+final _logger = AppLogger.getLogger(_Utils);
 
 void successAlert({
   required BuildContext context,
@@ -82,4 +90,23 @@ UserModel? getUserOrLogOut(WidgetRef ref, context) {
     ref.read(authRepositoryProvider).logOut();
   }
   return user;
+}
+
+String formatDate(DateTime time) {
+  const String separator = "/";
+  return "${time.day}$separator${time.month}$separator${time.year}";
+}
+
+Future<File?> pickGaleryImage() async {
+  try {
+    _logger.i("Attempting to pick image from gallery");
+    final result = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (result != null) {
+      _logger.i("Image picked from gallery: ${result.path}");
+      return File(result.path);
+    }
+  } catch (e) {
+    _logger.e("Error picking image from gallery: $e");
+  }
+  return null;
 }
