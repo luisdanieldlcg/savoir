@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savoir/common/widgets/buttons.dart';
 
 import 'package:savoir/features/auth/controller/auth_controller.dart';
 import 'package:savoir/features/auth/view/login_view.dart';
@@ -36,26 +37,18 @@ class WelcomeView extends ConsumerWidget {
                       textAlign: TextAlign.center),
                   const SizedBox(height: 35),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: TextButton(
-                      onPressed: () {
-                        openModal(context, 0, ref);
-                      },
-                      child: const Text("Iniciar Sesión"),
-                    ),
+                  PrimaryButton(
+                    text: "Iniciar Sesión",
+                    onPressed: () {
+                      openModal(context, 0, ref);
+                    },
                   ),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        openModal(context, 1, ref);
-                      },
-                      child: const Text("Crear cuenta"),
-                    ),
+                  SecondaryButton(
+                    text: "Crear cuenta",
+                    onPressed: () {
+                      openModal(context, 1, ref);
+                    },
                   ),
                 ],
               ),

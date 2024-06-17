@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/common/widgets/buttons.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
+import 'package:savoir/features/profile/widgets/personal_details_genres.dart';
 import 'package:savoir/features/profile/widgets/personal_details_header.dart';
 
 class PersonalDetailsView extends ConsumerStatefulWidget {
@@ -167,43 +169,21 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
                           SizedBox(height: 20),
                           Text("Género", style: TextStyle(fontSize: 16)),
                           SizedBox(height: 24),
-                          Wrap(
-                            children: [
-                              for (final genre in PersonalDetailsView._genreChoices)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Theme(
-                                    data: ThemeData(), // reset the ThemeData to the default
-                                    child: ChoiceChip(
-                                      checkmarkColor: Colors.white,
-                                      label: Text(genre),
-                                      side: BorderSide.none,
-                                      selected: _selectedGenre == genre,
-                                      selectedColor: AppTheme.primaryColor,
-                                      labelStyle: TextStyle(color: Colors.white),
-                                      backgroundColor: AppTheme.secondaryColor,
-                                      onSelected: (selected) {
-                                        setState(() {
-                                          _selectedGenre = genre;
-                                          _buttonDisabled = !_formKey.currentState!.validate();
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                            ],
+                          PersonalDetailsGenres(
+                            genreChoices: PersonalDetailsView._genreChoices,
+                            activeGenre: _selectedGenre,
+                            onGenreTap: (genre) {
+                              setState(() {
+                                _selectedGenre = genre;
+                                _buttonDisabled = !_formKey.currentState!.validate();
+                              });
+                            },
                           ),
                           const SizedBox(height: 40),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                textStyle: TextStyle(fontSize: 18),
-                              ),
-                              onPressed: _buttonDisabled ? null : () => finish(),
-                              child: Text(widget.firstTime ? "Continuar" : "Guardar Cambios"),
-                            ),
+                          PrimaryButton(
+                            text: "Guardar Cambios",
+                            onPressed: () => finish(),
+                            disabled: _buttonDisabled,
                           ),
                         ],
                       ),
