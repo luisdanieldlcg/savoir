@@ -224,11 +224,11 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
           genre: _selectedGenre,
           image: _image,
           onSuccess: (updatedUser) {
-            if (!mounted) return;
+            ref.read(userProvider.notifier).state = updatedUser;
+
             if (widget.firstTime) {
               Navigator.of(context).pushNamedAndRemoveUntil("/home", (route) => false);
             } else {
-              ref.read(userProvider.notifier).state = updatedUser;
               Navigator.of(context).pop();
             }
           },
