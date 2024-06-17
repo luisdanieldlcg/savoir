@@ -4,6 +4,7 @@ import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
+import 'package:savoir/router.dart';
 
 class SearchPage extends ConsumerWidget {
   const SearchPage({super.key});
@@ -77,13 +78,29 @@ class SearchPage extends ConsumerWidget {
               "Restaurantes cerca de ti",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            Text(
-              "¡Déjà vu!",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade600,
-              ),
+            Row(
+              children: [
+                Text(
+                  "¡Déjà vu!",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  icon: Icon(
+                    Icons.location_on_outlined,
+                    size: 28,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                    context,
+                    AppRouter.restaurantsMap,
+                  ),
+                  color: AppTheme.primaryColor,
+                )
+              ],
             ),
             const SizedBox(height: 20),
             ListView.builder(

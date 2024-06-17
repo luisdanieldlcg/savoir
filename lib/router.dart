@@ -5,6 +5,7 @@ import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/personal_details_page.dart';
+import 'package:savoir/features/search/view/restaurant_map_view.dart';
 import 'package:savoir/startup.dart';
 
 class AppRouter {
@@ -14,6 +15,7 @@ class AppRouter {
   static const welcome = "/welcome";
   static const home = "/home";
   static const personalDetails = "/personal-details";
+  static const restaurantsMap = "/restaurants-map";
 
   static Route<Widget> generateRoutes(RouteSettings settings) {
     final name = settings.name;
@@ -30,6 +32,8 @@ class AppRouter {
         return _createRoute(const Home());
       case personalDetails:
         return _createRoute(const PersonalDetailsView(firstTime: false));
+      case restaurantsMap:
+        return _createRoute(const RestaurantMapView());
       default:
         return _createRoute(UnknownRouteScreen(targetRoute: name));
     }
