@@ -115,7 +115,10 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
                   PersonalDetailsHeader(
                     avatarCallback: () async {
                       final image = await pickGaleryImage();
-                      setState(() => _image = image);
+                      setState(() {
+                        _image = image;
+                        _buttonDisabled = !_formKey.currentState!.validate();
+                      });
                     },
                     avatar: _image != null
                         ? FileImage(_image!)

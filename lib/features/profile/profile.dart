@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/common/widgets/user_avatar.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/router.dart';
 
@@ -56,22 +57,10 @@ class Profile extends ConsumerWidget {
           child: Column(
             children: [
               const SizedBox(height: 40),
-              CircleAvatar(
-                radius: 62,
-                backgroundColor: AppTheme.primaryColor,
-                child: ClipOval(
-                  child: SizedBox.fromSize(
-                    size: const Size.fromRadius(60),
-                    child: Image.network(
-                      user!.profilePicture,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+              UserAvatar(imageSrc: user!.profilePicture),
               const SizedBox(height: 20),
               Text(
-                user!.username,
+                user.username,
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
