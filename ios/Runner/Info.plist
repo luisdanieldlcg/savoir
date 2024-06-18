@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Need to access your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Need to access your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need to access your location</string>
+	<key> NSMicrophoneUsageDescription</key>
+	<string>Need to access your microphone</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -26,20 +34,26 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need to access your photo library</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need to access your camera</string>
-	<key> NSMicrophoneUsageDescription</key>
-	<string>Need to access your microphone</string>
-	<key> NSLocationWhenInUseUsageDescription </key>
-	<string>Need to access your location</string>
-	<key> NSLocationAlwaysUsageDescription </key>
-	<string>Need to access your location</string>
-	<key> NSLocationAlwaysAndWhenInUseUsageDescription </key>
-	<string>Need to access your location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need to access your photo library</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>bluetooth-central</string>
+		<string>bluetooth-peripheral</string>
+		<string>external-accessory</string>
+		<string>fetch</string>
+		<string>location</string>
+		<string>nearby-interaction</string>
+		<string>processing</string>
+		<string>push-to-talk</string>
+		<string>remote-notification</string>
+		<string>voip</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
