@@ -32,6 +32,12 @@
 	<string>Need to access your camera</string>
 	<key> NSMicrophoneUsageDescription</key>
 	<string>Need to access your microphone</string>
+	<key> NSLocationWhenInUseUsageDescription </key>
+	<string>Need to access your location</string>
+	<key> NSLocationAlwaysUsageDescription </key>
+	<string>Need to access your location</string>
+	<key> NSLocationAlwaysAndWhenInUseUsageDescription </key>
+	<string>Need to access your location</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

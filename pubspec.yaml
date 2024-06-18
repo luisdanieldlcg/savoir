@@ -41,6 +41,7 @@ dependencies:
   google_fonts: ^6.2.1
   google_maps_flutter: ^2.7.0
   image_picker: ^1.1.2
+  location: ^6.0.2
   logger: ^2.3.0
   quickalert: ^1.1.0
   smooth_page_indicator: ^1.1.0

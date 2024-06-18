@@ -94,7 +94,7 @@ class SearchPage extends ConsumerWidget {
                     Icons.location_on_outlined,
                     size: 28,
                   ),
-                  onPressed: () => Navigator.pushReplacementNamed(
+                  onPressed: () => Navigator.pushNamed(
                     context,
                     AppRouter.restaurantsMap,
                   ),
