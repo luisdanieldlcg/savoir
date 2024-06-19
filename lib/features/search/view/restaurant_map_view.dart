@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,9 +85,25 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
               ref.watch(nearbyRestaurants((locationData.latitude!, locationData.longitude!)));
           return restaurants.when(
             data: (place) {
-              return Stack(
-                children: [
-                  GoogleMap(
+              final markers = place.results
+                  .map((r) => Marker(
+                        markerId: MarkerId(r.name),
+                        position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
+                        infoWindow: InfoWindow(
+                          title: r.name,
+                        ),
+                      ))
+                  .toList();
+              markers.add(Marker(
+                markerId: MarkerId('user'),
+                position: LatLng(locationData.latitude!, locationData.longitude!),
+                infoWindow: InfoWindow(
+                  title: 'You are here',
+                ),
+              ));
+              return CustomGoogleMapMarkerBuilder(
+                builder: (context, markers) {
+                  return GoogleMap(
                     initialCameraPosition: CameraPosition(
                       target: LatLng(
                         locationData.latitude!,
@@ -97,35 +114,58 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                     onMapCreated: (GoogleMapController controller) {
                       _mapController.complete(controller);
                     },
-                    markers: {
-                      Marker(
-                        markerId: MarkerId('user'),
-                        position: LatLng(
-                          locationData.latitude!,
-                          locationData.longitude!,
-                        ),
-                        infoWindow: InfoWindow(
-                          title: 'You are here',
-                        ),
+                    markers: markers!,
+                  );
+                },
+                customMarkers: [
+                  MarkerData(
+                    marker: Marker(
+                      markerId: MarkerId('user'),
+                      position: LatLng(locationData.latitude!, locationData.longitude!),
+                      infoWindow: InfoWindow(
+                        title: 'You are here',
                       ),
-                      for (var r in place.results)
-                        Marker(
-                          markerId: MarkerId(r.name),
-                          position: LatLng(
-                            r.geometry.location.lat,
-                            r.geometry.location.lng,
-                          ),
-                          infoWindow: InfoWindow(
-                            title: r.name,
-                          ),
-                        ),
-                    },
-                  ),
-                  Positioned(
+                    ),
                     child: UserAvatar(
                       imageSrc: user!.profilePicture,
+                      radius: 24,
+                      withBorder: false,
                     ),
-                  )
+                  ),
+                  for (final r in place.results)
+                    MarkerData(
+                      marker: Marker(
+                        markerId: MarkerId(r.name),
+                        position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
+                        infoWindow: InfoWindow(
+                          title: r.name,
+                        ),
+                      ),
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          image: DecorationImage(
+                            image: NetworkImage(r.icon),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      // child: UserAvatar(
+                      //   imageSrc: r.icon,
+                      //   radius: 24,
+                      //   withBorder: false,
+                      // ),
+
+                      // child: Image.network(
+                      //   r.icon,
+                      //   width: 48,
+                      //   height: 48,
+                      //   fit: BoxFit.cover,
+                      // ),
+                      // restaurant popup
+                    ),
                 ],
               );
             },

@@ -5,11 +5,13 @@ class UserAvatar extends StatelessWidget {
   final String imageSrc;
   final double radius;
   final bool withBorder;
+  final bool zoomOnTap;
   const UserAvatar({
     super.key,
     required this.imageSrc,
     this.radius = 62,
     this.withBorder = true,
+    this.zoomOnTap = false,
   });
 
   @override
