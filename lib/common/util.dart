@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
@@ -66,13 +67,21 @@ void alert({
 
 class ErrorScreen extends StatelessWidget {
   final String error;
+  final String? stackTrace;
+  static final Logger _logger = AppLogger.getLogger(ErrorScreen);
+
   const ErrorScreen({
     super.key,
     required this.error,
+    this.stackTrace,
   });
 
   @override
   Widget build(BuildContext context) {
+    _logger.e('Error: $error');
+    if (stackTrace != null) {
+      _logger.e('Stack Trace: $stackTrace');
+    }
     return Scaffold(
       body: Center(
         child: Text(
