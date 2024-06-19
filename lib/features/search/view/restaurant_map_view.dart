@@ -57,7 +57,7 @@ final nearbyRestaurants = FutureProvider((ref) async {
       "&location=40.712776,-74.005974"
       "&radius=1500"
       "&type=restaurant"
-      "&key=${kGoogleApiTestKey}";
+      "&key=$kGoogleApiTestKey";
   final response = await dio.get(url);
   print(response.data);
   return [];
@@ -71,7 +71,7 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
     final loc = ref.watch(initLocation);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Restaurant Map View'),
+        title: Text('Restaurantes Cercanos'),
       ),
       body: loc.when(
         data: (LocationData? locationData) {
@@ -81,7 +81,7 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
           final restaurants = ref.watch(nearbyRestaurants);
           restaurants.when(
             data: (data) {
-              print(data);
+              print(data); 
             },
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, stackTrace) => Center(child: Text('Error: $error')),

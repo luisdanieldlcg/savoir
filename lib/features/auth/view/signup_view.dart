@@ -99,7 +99,6 @@ class _SignupViewState extends ConsumerState<SignupView> {
                       TextInput(
                         controller: _phoneNumber,
                         hintText: "123-456-7890",
-                        obscureText: true,
                         keyboardType: TextInputType.phone,
                       ),
                       const SizedBox(height: 16),
