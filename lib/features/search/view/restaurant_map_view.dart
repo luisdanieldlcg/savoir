@@ -12,11 +12,13 @@ import 'package:location/location.dart';
 import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
+import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
 import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/widgets/map/search_modal.dart';
 import 'package:savoir/features/search/widgets/map/search_popup.dart';
+import 'package:savoir/features/search/widgets/map/search_refresh.dart';
 import 'package:savoir/features/search/widgets/map/search_result_count.dart';
 
 class RestaurantMapView extends ConsumerStatefulWidget {
@@ -76,6 +78,7 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
   final _mapController = Completer<GoogleMapController>();
 
   Restaurant? _selectedRestaurant;
+  (double, double)? refreshLatLng;
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +96,10 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
           final restaurants = ref.watch(
             nearbyRestaurants((locationData.latitude!, locationData.longitude!)),
           );
+
           return restaurants.when(
             data: (place) {
+              _logger.i("Re render with ${place.restaurants.length} restaurants");
               final popups = place.restaurants.map((restaurant) {
                 return MarkerData(
                   marker: Marker(
@@ -128,6 +133,12 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                             _mapController.complete(controller);
                           }
                         },
+                        onCameraMove: (CameraPosition position) {
+                          setState(() {
+                            refreshLatLng = (position.target.latitude, position.target.longitude);
+                            _logger.i('Refresh LatLng: $refreshLatLng');
+                          });
+                        },
                         markers: markers ?? <Marker>{},
                       );
                     },
@@ -153,6 +164,16 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                       ? const SizedBox.shrink()
                       : SearchModal(restaurant: _selectedRestaurant!),
                   SearchResultCount(count: place.restaurants.length),
+                  if (refreshLatLng != null)
+                    SearchRefresh(
+                      onRefresh: () async {
+                        final provider =
+                            ref.read(nearbyRestaurants((refreshLatLng!.$1, refreshLatLng!.$2)));
+                        setState(() {
+                          refreshLatLng = null;
+                        });
+                      },
+                    )
                 ],
               );
             },
