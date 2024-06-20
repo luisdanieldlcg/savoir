@@ -175,9 +175,6 @@ class Result {
 
   String toJson() => json.encode(toMap());
 
-  factory Result.fromJson(String source) =>
-      Result.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
     return 'Result(businessStatus: $businessStatus, geometry: $geometry, icon: $icon, iconBackgroundColor: $iconBackgroundColor, iconMaskBaseUri: $iconMaskBaseUri, name: $name, openingHours: $openingHours, photos: $photos, placeId: $placeId, plusCode: $plusCode, rating: $rating, reference: $reference, scope: $scope, types: $types, userRatingsTotal: $userRatingsTotal, vicinity: $vicinity, priceLevel: $priceLevel)';
@@ -228,6 +225,7 @@ class Result {
   }
 
   factory Result.fromMap(Map<String, dynamic> map) {
+    print("List of photos: ${map["photos"]}");
     return Result(
       businessStatus: map['businessStatus'] != null ? map['businessStatus'] as String : '',
       geometry: Geometry.fromMap(map['geometry'] as Map<String, dynamic>),
@@ -239,13 +237,7 @@ class Result {
       openingHours: map['openingHours'] != null
           ? OpeningHours.fromMap(map['openingHours'] as Map<String, dynamic>)
           : null,
-      photos: map['photos'] != null
-          ? List<Photo>.from(
-              (map['photos'] as List<dynamic>).map<Photo>(
-                (x) => Photo.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : [],
+      photos: List<Photo>.from(map["photos"].map((x) => Photo.fromMap(x))),
       placeId: map['placeId'] != null ? map['placeId'] as String : '',
       plusCode: map['plusCode'] != null
           ? PlusCode.fromMap(map['plusCode'] as Map<String, dynamic>)
@@ -468,7 +460,7 @@ class OpeningHours {
 class Photo {
   final int height;
   final List<String> htmlAttributions;
-  final String photoReference;
+  final String? photoReference;
   final int width;
 
   const Photo({
@@ -507,15 +499,10 @@ class Photo {
       htmlAttributions: map['htmlAttributions'] != null
           ? List<String>.from((map['htmlAttributions'] as List<String>))
           : [],
-      photoReference: map['photoReference'] != null ? map['photoReference'] as String : '',
+      photoReference: map['photo_reference'] != null ? map['photo_reference'] as String : '',
       width: map['width'] != null ? map['width'] as int : 0,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Photo.fromJson(String source) =>
-      Photo.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

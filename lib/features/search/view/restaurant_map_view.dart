@@ -81,91 +81,143 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
           if (locationData == null) {
             return const Center(child: Text('Location not available'));
           }
-          final restaurants =
-              ref.watch(nearbyRestaurants((locationData.latitude!, locationData.longitude!)));
+          final restaurants = ref.watch(
+            nearbyRestaurants((locationData.latitude!, locationData.longitude!)),
+          );
           return restaurants.when(
             data: (place) {
               final markers = place.results
-                  .map((r) => Marker(
-                        markerId: MarkerId(r.name),
-                        position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
-                        infoWindow: InfoWindow(
-                          title: r.name,
-                        ),
-                      ))
-                  .toList();
-              markers.add(Marker(
-                markerId: MarkerId('user'),
-                position: LatLng(locationData.latitude!, locationData.longitude!),
-                infoWindow: InfoWindow(
-                  title: 'You are here',
-                ),
-              ));
-              return CustomGoogleMapMarkerBuilder(
-                builder: (context, markers) {
-                  return GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(
-                        locationData.latitude!,
-                        locationData.longitude!,
-                      ),
-                      zoom: 14,
+                  .where((result) => result.types[0] == "restaurant" && result.types.length == 1)
+                  .map(
+                (r) {
+                  _logger.i('Types of this marker: ${r.types}, name: ${r.name}');
+                  return Marker(
+                    markerId: MarkerId(r.name),
+                    position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
+                    infoWindow: InfoWindow(
+                      title: r.name,
                     ),
-                    onMapCreated: (GoogleMapController controller) {
-                      _mapController.complete(controller);
-                    },
-                    markers: markers!,
+                    onTap: () async {},
                   );
                 },
-                customMarkers: [
-                  MarkerData(
-                    marker: Marker(
-                      markerId: MarkerId('user'),
-                      position: LatLng(locationData.latitude!, locationData.longitude!),
-                      infoWindow: InfoWindow(
-                        title: 'You are here',
-                      ),
-                    ),
-                    child: UserAvatar(
-                      imageSrc: user!.profilePicture,
-                      radius: 24,
-                      withBorder: false,
-                    ),
+              ).toList();
+              markers.add(
+                Marker(
+                  markerId: MarkerId('user'),
+                  position: LatLng(locationData.latitude!, locationData.longitude!),
+                  infoWindow: InfoWindow(
+                    title: 'You are here',
                   ),
-                  for (final r in place.results)
-                    MarkerData(
-                      marker: Marker(
-                        markerId: MarkerId(r.name),
-                        position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
-                        infoWindow: InfoWindow(
-                          title: r.name,
+                ),
+              );
+              return Stack(
+                children: [
+                  CustomGoogleMapMarkerBuilder(
+                    builder: (context, markers) {
+                      return GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            locationData.latitude!,
+                            locationData.longitude!,
+                          ),
+                          zoom: 14,
                         ),
-                      ),
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          image: DecorationImage(
-                            image: NetworkImage(r.icon),
-                            fit: BoxFit.cover,
+                        onMapCreated: (GoogleMapController controller) {
+                          if (!_mapController.isCompleted) {
+                            _mapController.complete(controller);
+                          }
+                        },
+                        // markers: markers!,
+                        markers: markers ?? <Marker>{},
+                      );
+                    },
+                    customMarkers: [
+                      MarkerData(
+                        marker: Marker(
+                          markerId: MarkerId('user'),
+                          position: LatLng(locationData.latitude!, locationData.longitude!),
+                          infoWindow: InfoWindow(
+                            title: 'You are here',
                           ),
                         ),
+                        child: UserAvatar(
+                          imageSrc: user!.profilePicture,
+                          radius: 24,
+                          withBorder: false,
+                        ),
                       ),
-                      // child: UserAvatar(
-                      //   imageSrc: r.icon,
-                      //   radius: 24,
-                      //   withBorder: false,
-                      // ),
+                      for (final r in place.results)
+                        MarkerData(
+                          marker: Marker(
+                            markerId: MarkerId(r.name),
+                            position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
+                            infoWindow: InfoWindow(
+                              title: r.name,
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: 100,
+                            child: Column(
+                              children: [
+                                // circle indicator
+                                Container(
+                                  margin: const EdgeInsets.only(top: 4),
+                                  child: Icon(
+                                    Icons.circle,
+                                    color: Colors.green,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
 
-                      // child: Image.network(
-                      //   r.icon,
-                      //   width: 48,
-                      //   height: 48,
-                      //   fit: BoxFit.cover,
-                      // ),
-                      // restaurant popup
-                    ),
+                  // bottom sheet with restaurant details on tap
+                  DraggableScrollableSheet(
+                    initialChildSize: 0.1,
+                    minChildSize: 0.1,
+                    maxChildSize: 0.5,
+                    builder: (context, scrollController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                        ),
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: place.results.length,
+                          itemBuilder: (context, index) {
+                            final r = place.results[index];
+                            final photos = r.photos;
+                            return ListTile(
+                              title: Text(r.name),
+                              subtitle: Text(r.vicinity),
+                              trailing: Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                // show restaurant details
+                              },
+                              // leading: photos.isNotEmpty && photos[0].photoReference != ''
+                              //     ? Image.network(getPhotoUrl(photos[0].photoReference!))
+                              //     : null,
+
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    photos.isNotEmpty && photos[0].photoReference != null
+                                        ? NetworkImage(getPhotoUrl(photos[0].photoReference!))
+                                        : null,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
               );
             },
@@ -182,5 +234,12 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
         ),
       ),
     );
+  }
+
+  String getPhotoUrl(String photoReference) {
+    final url =
+        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReference&key=$kGoogleApiTestKey";
+    _logger.i('Photo URL: $url');
+    return url;
   }
 }
