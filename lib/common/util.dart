@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
 
@@ -118,4 +119,8 @@ Future<File?> pickGaleryImage() async {
     _logger.e("Error picking image from gallery: $e");
   }
   return null;
+}
+
+String photoFromReferenceGoogleAPI(String photoReference) {
+  return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReference&key=$kGoogleApiTestKey";
 }

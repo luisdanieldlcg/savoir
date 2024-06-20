@@ -5,23 +5,23 @@ import 'package:flutter/foundation.dart';
 
 class Place {
   final List<dynamic> htmlAttributions;
-  final List<Result> results;
+  final List<Restaurant> restaurants;
   final String status;
 
   const Place({
     required this.htmlAttributions,
-    required this.results,
+    required this.restaurants,
     required this.status,
   });
 
   Place copyWith({
     List<dynamic>? htmlAttributions,
-    List<Result>? results,
+    List<Restaurant>? results,
     String? status,
   }) {
     return Place(
       htmlAttributions: htmlAttributions ?? this.htmlAttributions,
-      results: results ?? this.results,
+      restaurants: results ?? this.restaurants,
       status: status ?? this.status,
     );
   }
@@ -29,7 +29,7 @@ class Place {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'htmlAttributions': htmlAttributions,
-      'results': results.map((x) => x.toMap()).toList(),
+      'results': restaurants.map((x) => x.toMap()).toList(),
       'status': status,
     };
   }
@@ -39,10 +39,10 @@ class Place {
       htmlAttributions: map['htmlAttributions'] != null
           ? List<dynamic>.from((map['htmlAttributions'] as List<dynamic>))
           : [],
-      results: map["results"] != null
-          ? List<Result>.from(
-              (map['results'] as List<dynamic>).map<Result>(
-                (x) => Result.fromMap(x as Map<String, dynamic>),
+      restaurants: map["results"] != null
+          ? List<Restaurant>.from(
+              (map['results'] as List<dynamic>).map<Restaurant>(
+                (x) => Restaurant.fromMap(x as Map<String, dynamic>),
               ),
             )
           : [],
@@ -57,22 +57,22 @@ class Place {
 
   @override
   String toString() =>
-      'Place(htmlAttributions: $htmlAttributions, results: $results, status: $status)';
+      'Place(htmlAttributions: $htmlAttributions, results: $restaurants, status: $status)';
 
   @override
   bool operator ==(covariant Place other) {
     if (identical(this, other)) return true;
 
     return listEquals(other.htmlAttributions, htmlAttributions) &&
-        listEquals(other.results, results) &&
+        listEquals(other.restaurants, restaurants) &&
         other.status == status;
   }
 
   @override
-  int get hashCode => htmlAttributions.hashCode ^ results.hashCode ^ status.hashCode;
+  int get hashCode => htmlAttributions.hashCode ^ restaurants.hashCode ^ status.hashCode;
 }
 
-class Result {
+class Restaurant {
   final String businessStatus;
   final Geometry geometry;
   final String icon;
@@ -91,7 +91,7 @@ class Result {
   final String vicinity;
   final int? priceLevel;
 
-  const Result({
+  const Restaurant({
     required this.businessStatus,
     required this.geometry,
     required this.icon,
@@ -111,7 +111,7 @@ class Result {
     this.priceLevel,
   });
 
-  Result copyWith({
+  Restaurant copyWith({
     String? businessStatus,
     Geometry? geometry,
     String? icon,
@@ -130,7 +130,7 @@ class Result {
     String? vicinity,
     int? priceLevel,
   }) {
-    return Result(
+    return Restaurant(
       businessStatus: businessStatus ?? this.businessStatus,
       geometry: geometry ?? this.geometry,
       icon: icon ?? this.icon,
@@ -181,7 +181,7 @@ class Result {
   }
 
   @override
-  bool operator ==(covariant Result other) {
+  bool operator ==(covariant Restaurant other) {
     if (identical(this, other)) return true;
 
     return other.businessStatus == businessStatus &&
@@ -224,9 +224,8 @@ class Result {
         priceLevel.hashCode;
   }
 
-  factory Result.fromMap(Map<String, dynamic> map) {
-    print("List of photos: ${map["photos"]}");
-    return Result(
+  factory Restaurant.fromMap(Map<String, dynamic> map) {
+    return Restaurant(
       businessStatus: map['businessStatus'] != null ? map['businessStatus'] as String : '',
       geometry: Geometry.fromMap(map['geometry'] as Map<String, dynamic>),
       icon: map['icon'] != null ? map['icon'] as String : '',
@@ -460,7 +459,7 @@ class OpeningHours {
 class Photo {
   final int height;
   final List<String> htmlAttributions;
-  final String? photoReference;
+  final String photoReference;
   final int width;
 
   const Photo({
@@ -499,7 +498,9 @@ class Photo {
       htmlAttributions: map['htmlAttributions'] != null
           ? List<String>.from((map['htmlAttributions'] as List<String>))
           : [],
-      photoReference: map['photo_reference'] != null ? map['photo_reference'] as String : '',
+      photoReference: map['photo_reference'] != null
+          ? map['photo_reference'] as String
+          : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png',
       width: map['width'] != null ? map['width'] as int : 0,
     );
   }

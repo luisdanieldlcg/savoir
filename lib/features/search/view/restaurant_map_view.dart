@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:savoir/common/constants.dart';
@@ -12,6 +15,9 @@ import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
 import 'package:savoir/features/search/model/place.dart';
+import 'package:savoir/features/search/widgets/map/search_modal.dart';
+import 'package:savoir/features/search/widgets/map/search_popup.dart';
+import 'package:savoir/features/search/widgets/map/search_result_count.dart';
 
 class RestaurantMapView extends ConsumerStatefulWidget {
   const RestaurantMapView({super.key});
@@ -62,12 +68,15 @@ final nearbyRestaurants = FutureProvider.family<Place, (double, double)>((ref, c
   _logger.i('Places API Http Request: $url');
   final response = await dio.get(url);
   final p = Place.fromMap(response.data);
-  _logger.i('Places API Response: ${p.results}');
+  _logger.i('Places API Response: ${p.restaurants}');
   return p;
 });
 
 class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
   final _mapController = Completer<GoogleMapController>();
+
+  Restaurant? _selectedRestaurant;
+
   @override
   Widget build(BuildContext context) {
     final user = getUserOrLogOut(ref, context);
@@ -86,35 +95,27 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
           );
           return restaurants.when(
             data: (place) {
-              final markers = place.results
-                  .where((result) => result.types[0] == "restaurant" && result.types.length == 1)
-                  .map(
-                (r) {
-                  _logger.i('Types of this marker: ${r.types}, name: ${r.name}');
-                  return Marker(
-                    markerId: MarkerId(r.name),
-                    position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
-                    infoWindow: InfoWindow(
-                      title: r.name,
-                    ),
-                    onTap: () async {},
-                  );
-                },
-              ).toList();
-              markers.add(
-                Marker(
-                  markerId: MarkerId('user'),
-                  position: LatLng(locationData.latitude!, locationData.longitude!),
-                  infoWindow: InfoWindow(
-                    title: 'You are here',
+              final popups = place.restaurants.map((restaurant) {
+                return MarkerData(
+                  marker: Marker(
+                    consumeTapEvents: true,
+                    onTap: () => setState(() => _selectedRestaurant = restaurant),
+                    markerId: MarkerId(restaurant.name),
+                    position:
+                        LatLng(restaurant.geometry.location.lat, restaurant.geometry.location.lng),
                   ),
-                ),
-              );
+                  child: SearchPopup(
+                    isSelected: _selectedRestaurant == restaurant,
+                    title: restaurant.rating.toString(),
+                  ),
+                );
+              });
               return Stack(
                 children: [
                   CustomGoogleMapMarkerBuilder(
                     builder: (context, markers) {
                       return GoogleMap(
+                        zoomControlsEnabled: false,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
                             locationData.latitude!,
@@ -127,7 +128,6 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                             _mapController.complete(controller);
                           }
                         },
-                        // markers: markers!,
                         markers: markers ?? <Marker>{},
                       );
                     },
@@ -146,78 +146,13 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                           withBorder: false,
                         ),
                       ),
-                      for (final r in place.results)
-                        MarkerData(
-                          marker: Marker(
-                            markerId: MarkerId(r.name),
-                            position: LatLng(r.geometry.location.lat, r.geometry.location.lng),
-                            infoWindow: InfoWindow(
-                              title: r.name,
-                            ),
-                          ),
-                          child: SizedBox(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                // circle indicator
-                                Container(
-                                  margin: const EdgeInsets.only(top: 4),
-                                  child: Icon(
-                                    Icons.circle,
-                                    color: Colors.green,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      ...popups,
                     ],
                   ),
-
-                  // bottom sheet with restaurant details on tap
-                  DraggableScrollableSheet(
-                    initialChildSize: 0.1,
-                    minChildSize: 0.1,
-                    maxChildSize: 0.5,
-                    builder: (context, scrollController) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                          ),
-                        ),
-                        child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: place.results.length,
-                          itemBuilder: (context, index) {
-                            final r = place.results[index];
-                            final photos = r.photos;
-                            return ListTile(
-                              title: Text(r.name),
-                              subtitle: Text(r.vicinity),
-                              trailing: Icon(Icons.arrow_forward_ios),
-                              onTap: () {
-                                // show restaurant details
-                              },
-                              // leading: photos.isNotEmpty && photos[0].photoReference != ''
-                              //     ? Image.network(getPhotoUrl(photos[0].photoReference!))
-                              //     : null,
-
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    photos.isNotEmpty && photos[0].photoReference != null
-                                        ? NetworkImage(getPhotoUrl(photos[0].photoReference!))
-                                        : null,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
+                  _selectedRestaurant == null
+                      ? const SizedBox.shrink()
+                      : SearchModal(restaurant: _selectedRestaurant!),
+                  SearchResultCount(count: place.restaurants.length),
                 ],
               );
             },
@@ -234,12 +169,5 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
         ),
       ),
     );
-  }
-
-  String getPhotoUrl(String photoReference) {
-    final url =
-        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReference&key=$kGoogleApiTestKey";
-    _logger.i('Photo URL: $url');
-    return url;
   }
 }
