@@ -34,7 +34,9 @@ class SearchModal extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
+                      restaurant.photos.isEmpty
+                          ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
+                          : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
                       width: 100,
                       height: double.infinity,
                       fit: BoxFit.cover,
