@@ -5,10 +5,16 @@ class RoundedTextInput extends StatelessWidget {
   final String hintText;
 
   final Icon leftIcon;
+  final VoidCallback? onTap;
+  final bool readonly;
+  final Function(String)? onChanged;
   const RoundedTextInput({
     super.key,
     required this.hintText,
     required this.leftIcon,
+    this.onTap,
+    this.readonly = false,
+    this.onChanged,
   });
 
   @override
@@ -19,6 +25,9 @@ class RoundedTextInput extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        onChanged: onChanged,
+        onTap: onTap,
+        readOnly: readonly,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           border: OutlineInputBorder(

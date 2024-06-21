@@ -338,8 +338,8 @@ class Location {
 
   factory Location.fromMap(Map<String, dynamic> map) {
     return Location(
-      lat: map['lat'] as double,
-      lng: map['lng'] as double,
+      lat: double.parse(map['lat'].toString()),
+      lng: double.parse(map['lng'].toString()),
     );
   }
 
