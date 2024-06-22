@@ -4,10 +4,9 @@ import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
-import 'package:savoir/router.dart';
 
-class SearchPage extends ConsumerWidget {
-  const SearchPage({super.key});
+class SearchView extends ConsumerWidget {
+  const SearchView({super.key});
 
   static final exampleRestaurants = [
     {
@@ -47,13 +46,28 @@ class SearchPage extends ConsumerWidget {
         toolbarHeight: 144,
         titleSpacing: 18,
         flexibleSpace: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              RoundedTextInput(
-                hintText: 'Buscar restaurantes',
-                leftIcon: Icon(Icons.search),
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: RoundedTextInput(
+                      hintText: 'Buscar restaurantes',
+                      leftIcon: Icon(Icons.search),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  IconButton(
+                    icon: Icon(
+                      Icons.map,
+                      size: 32,
+                      color: AppTheme.primaryColor,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
               ),
             ],
           ),
@@ -78,29 +92,13 @@ class SearchPage extends ConsumerWidget {
               "Restaurantes cerca de ti",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            Row(
-              children: [
-                Text(
-                  "¡Déjà vu!",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(
-                    Icons.location_on_outlined,
-                    size: 28,
-                  ),
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    AppRouter.restaurantsMap,
-                  ),
-                  color: AppTheme.primaryColor,
-                )
-              ],
+            Text(
+              "¡Déjà vu!",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+              ),
             ),
             const SizedBox(height: 20),
             ListView.builder(

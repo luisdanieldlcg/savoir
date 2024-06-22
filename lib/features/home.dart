@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:savoir/features/bookings/bookings_page.dart';
 import 'package:savoir/features/favorites/favorites_page.dart';
 import 'package:savoir/features/profile/profile.dart';
-import 'package:savoir/features/search/search_page.dart';
+import 'package:savoir/features/search/view/search/search_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    SearchPage(),
+    SearchView(),
     BookingsPage(),
     FavoritesPage(),
     Profile(),

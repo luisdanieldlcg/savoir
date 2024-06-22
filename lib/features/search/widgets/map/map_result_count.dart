@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SearchResultCount extends StatelessWidget {
+class MapResultCount extends StatelessWidget {
   final int count;
-  const SearchResultCount({super.key, required this.count});
+  const MapResultCount({super.key, required this.count});
 
   @override
   Widget build(BuildContext context) {

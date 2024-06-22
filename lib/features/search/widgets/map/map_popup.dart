@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:savoir/common/theme.dart';
 
-class SearchPopup extends StatelessWidget {
+class MapPopup extends StatelessWidget {
   final bool isSelected;
   final String title;
-  const SearchPopup({super.key, required this.isSelected, required this.title});
+  const MapPopup({super.key, required this.isSelected, required this.title});
   @override
   Widget build(BuildContext context) {
     return SizedBox(

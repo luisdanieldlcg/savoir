@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
 
-class SearchRefresh extends StatelessWidget {
+class MapRefresh extends StatelessWidget {
   final VoidCallback onRefresh;
-  const SearchRefresh({
+  const MapRefresh({
     super.key,
     required this.onRefresh,
   });

@@ -5,8 +5,8 @@ import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/personal_details_page.dart';
-import 'package:savoir/features/search/view/restaurant_map_view.dart';
-import 'package:savoir/features/search/view/restaurant_search_view.dart';
+import 'package:savoir/features/search/view/map/restaurant_map_view.dart';
+import 'package:savoir/features/search/view/map/restaurant_search_view.dart';
 import 'package:savoir/startup.dart';
 
 class AppRouter {
