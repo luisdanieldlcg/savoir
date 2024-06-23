@@ -161,7 +161,7 @@ class Restaurant {
       'name': name,
       'openingHours': openingHours?.toMap(),
       'photos': photos.map((x) => x.toMap()).toList(),
-      'placeId': placeId,
+      'place_id': placeId,
       'plusCode': plusCode.toMap(),
       'rating': rating,
       'reference': reference,
@@ -236,12 +236,11 @@ class Restaurant {
       openingHours: map['openingHours'] != null
           ? OpeningHours.fromMap(map['openingHours'] as Map<String, dynamic>)
           : null,
-      // photos: List<Photo>.from(map["photos"].map((x) => Photo.fromMap(x))),
       photos: map["photos"] == null
           ? []
           : List<Photo>.from((map['photos'] as List<dynamic>)
               .map<Photo>((x) => Photo.fromMap(x as Map<String, dynamic>))),
-      placeId: map['placeId'] != null ? map['placeId'] as String : '',
+      placeId: map['place_id'] != null ? map['place_id'] as String : '',
       plusCode: map['plusCode'] != null
           ? PlusCode.fromMap(map['plusCode'] as Map<String, dynamic>)
           : PlusCode(compoundCode: '', globalCode: ''),

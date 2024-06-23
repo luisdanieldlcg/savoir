@@ -30,6 +30,7 @@ environment:
 dependencies:
   cloud_firestore: ^5.0.1
   cupertino_icons: ^1.0.6
+  custom_map_markers: ^0.0.2+1
   dio: ^5.4.3+1
   firebase_auth: ^5.1.0
   firebase_core: ^3.1.0
@@ -41,12 +42,12 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.1
   google_maps_flutter: ^2.7.0
-  custom_map_markers: ^0.0.2+1
   image_picker: ^1.1.2
   location: ^6.0.2
   logger: ^2.3.0
   quickalert: ^1.1.0
   smooth_page_indicator: ^1.1.0
+  url_launcher: ^6.3.0
   widget_mask: ^1.0.0+0
 
 dev_dependencies:

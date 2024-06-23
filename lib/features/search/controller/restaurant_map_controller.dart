@@ -46,16 +46,16 @@ final userLocationProvider = FutureProvider<LocationData?>((ref) async {
 
 final nearbyRestaurants = FutureProvider.family<Place, (double, double)>((ref, coords) async {
   final dio = Dio();
-  final url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+  final nearbySearch = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
       "?location=${coords.$1},${coords.$2}"
       "&radius=1500"
       "&type=restaurant"
       "&key=$kGoogleApiTestKey";
-  _logger.i('Places API Http Request: $url');
-  final response = await dio.get(url);
-  final p = Place.fromMap(response.data);
-  _logger.i('Places API Response: ${p.restaurants}');
-  return p;
+  _logger.i('Places API Http Request: $nearbySearch');
+  final response = await dio.get(nearbySearch);
+  final place = Place.fromMap(response.data);
+  _logger.i('Places API Response: ${place.restaurants}');
+  return place;
 });
 
 @immutable
