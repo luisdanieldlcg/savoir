@@ -8,6 +8,7 @@ import 'package:savoir/common/util.dart';
 import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_details_info_tab.dart';
+import 'package:savoir/features/search/view/details/tabs/restaurant_reviews_tab.dart';
 import 'package:savoir/features/search/widgets/details/restaurant_details_appbar.dart';
 import 'package:savoir/features/search/widgets/details/restaurant_details_summary.dart';
 
@@ -87,7 +88,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 400,
+                      height: 500,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TabBarView(
@@ -98,7 +99,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                               restaurant: widget.restaurant,
                               details: restaurantDetails,
                             ),
-                            Center(child: Text("Reseñas")),
+                            RestaurantReviewsTab(details: restaurantDetails),
                           ],
                         ),
                       ),
