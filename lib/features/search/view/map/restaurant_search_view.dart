@@ -6,8 +6,8 @@ import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
-import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
-import 'package:savoir/features/search/controller/restaurant_search_controller.dart';
+import 'package:savoir/features/search/model/controller/restaurant_map_controller.dart';
+import 'package:savoir/features/search/model/controller/restaurant_search_controller.dart';
 import 'package:savoir/features/search/model/place.dart';
 
 class RestaurantSearchView extends ConsumerStatefulWidget {

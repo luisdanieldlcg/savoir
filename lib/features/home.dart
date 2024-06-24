@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/features/bookings/bookings_page.dart';
-import 'package:savoir/features/favorites/favorites_page.dart';
+import 'package:savoir/features/favorites/favorites_view.dart';
 import 'package:savoir/features/profile/profile.dart';
 import 'package:savoir/features/search/view/search/search_view.dart';
 
@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _pages = const [
     SearchView(),
     BookingsPage(),
-    FavoritesPage(),
+    FavoritesView(),
     Profile(),
   ];
   @override

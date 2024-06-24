@@ -12,9 +12,12 @@ import 'package:savoir/features/onboarding/onboarding.dart';
 import 'package:savoir/features/profile/view/personal_details_page.dart';
 
 final startUpProvider = FutureProvider.family<UserModel?, String>((ref, uid) async {
+  // Initialize and cache user app state
   final database = ref.watch(databaseRepositoryProvider);
   final user = await database.readUser(uid);
   ref.watch(userProvider.notifier).state = user;
+  final favorite = await database.readFavorite(uid);
+  ref.watch(favoriteProvider.notifier).state = favorite;
   return user;
 });
 

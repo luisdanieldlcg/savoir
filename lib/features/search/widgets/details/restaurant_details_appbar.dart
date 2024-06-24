@@ -1,15 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:savoir/common/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RestaurantDetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
+import 'package:savoir/common/providers.dart';
+import 'package:savoir/common/theme.dart';
+import 'package:savoir/features/favorites/controller/favorites_controller.dart';
+import 'package:savoir/features/search/model/place.dart';
+import 'package:savoir/features/search/widgets/details/restaurant_favorite_button.dart';
+
+class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
+  final Restaurant restaurant;
   final String restaurantImage;
+
   const RestaurantDetailsAppBar({
     super.key,
+    required this.restaurant,
     required this.restaurantImage,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteState = ref.watch(favoriteProvider)!;
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -37,16 +48,17 @@ class RestaurantDetailsAppBar extends StatelessWidget implements PreferredSizeWi
         ),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 30),
-          child: IconButton(
-            icon: Icon(Icons.favorite_border),
-            style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(AppTheme.primaryColor),
-              backgroundColor: WidgetStatePropertyAll(Color(0xFFFFFFFF)),
-            ),
-            onPressed: () {},
-          ),
+        RestaurantFavoriteButton(
+          isFavorite:
+              favoriteState.restaurants.any((element) => element.placeId == restaurant.placeId),
+          onPressed: () {
+            ref.read(favoritesControllerProvider.notifier).toggleFavorite(
+                  placeId: restaurant.placeId,
+                  name: restaurant.name,
+                  photo: restaurantImage,
+                  vicinity: restaurant.vicinity,
+                );
+          },
         ),
       ],
     );

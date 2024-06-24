@@ -8,6 +8,7 @@ import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/storage_repository.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/router.dart';
@@ -145,6 +146,7 @@ class AuthController extends StateNotifier<bool> {
     required File? image,
     required Function(UserModel) onSuccess,
     required VoidCallback onError,
+    required bool firstTime,
   }) async {
     state = true;
     await Future.delayed(const Duration(seconds: 2));
@@ -174,7 +176,18 @@ class AuthController extends StateNotifier<bool> {
       );
       _logger.i("Updating user profile: $updatedUser");
       await ref.watch(databaseRepositoryProvider).updateUser(updatedUser);
+
+      if (firstTime) {
+        final FavoriteModel defaultFavorite = FavoriteModel(
+          userId: user.uid,
+          restaurants: [],
+        );
+        await ref.watch(databaseRepositoryProvider).updateFavorite(defaultFavorite);
+        ref.read(favoriteProvider.notifier).state = defaultFavorite;
+      }
+
       _logger.i("User profile updated successfully");
+
       state = false;
       onSuccess(updatedUser);
     } catch (e) {

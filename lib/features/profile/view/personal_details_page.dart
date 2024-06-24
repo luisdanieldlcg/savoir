@@ -206,6 +206,7 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
           birthDate: _birthDate,
           genre: _selectedGenre,
           image: _image,
+          firstTime: widget.firstTime,
           onSuccess: (updatedUser) {
             ref.read(userProvider.notifier).state = updatedUser;
 

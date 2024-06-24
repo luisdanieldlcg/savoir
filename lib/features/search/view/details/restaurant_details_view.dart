@@ -5,6 +5,8 @@ import 'package:savoir/common/logger.dart';
 
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/common/widgets/three_dot_progress_indicator.dart';
+import 'package:savoir/features/favorites/controller/favorites_controller.dart';
 import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_details_info_tab.dart';
@@ -46,8 +48,13 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
         : photoFromReferenceGoogleAPI(widget.restaurant.photos[0].photoReference);
     _logger.i("Passing placeId: ${widget.restaurant.placeId}");
     final details = ref.watch(restaurantDetailsProvider(widget.restaurant.placeId));
+    final updatingFavorite = ref.watch(favoritesControllerProvider);
+
     return Scaffold(
-      appBar: RestaurantDetailsAppBar(restaurantImage: restaurantImage),
+      appBar: RestaurantDetailsAppBar(
+        restaurantImage: restaurantImage,
+        restaurant: widget.restaurant,
+      ),
       body: Column(
         children: [
           const SizedBox(height: 20),
@@ -87,22 +94,32 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    SizedBox(
-                      height: 500,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            Center(child: Text("Menú")),
-                            RestaurantDetailsInfoTab(
-                              restaurant: widget.restaurant,
-                              details: restaurantDetails,
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 500,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TabBarView(
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                Center(child: Text("Menú")),
+                                RestaurantDetailsInfoTab(
+                                  restaurant: widget.restaurant,
+                                  details: restaurantDetails,
+                                ),
+                                RestaurantReviewsTab(details: restaurantDetails),
+                              ],
                             ),
-                            RestaurantReviewsTab(details: restaurantDetails),
-                          ],
+                          ),
                         ),
-                      ),
+                        if (updatingFavorite)
+                          Positioned(
+                            bottom: 0,
+                            left: 150,
+                            child: ThreeDotProgressIndicator(),
+                          ),
+                      ],
                     ),
                   ],
                 );
