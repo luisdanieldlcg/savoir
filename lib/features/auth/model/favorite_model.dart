@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class FavoriteModel {
   final List<RestaurantSummary> restaurants;
   final String userId;
@@ -45,11 +46,13 @@ class RestaurantSummary {
   final String vicinity;
   final String photo;
   final String placeId;
+  final double rating;
   RestaurantSummary({
     required this.name,
     required this.vicinity,
     required this.photo,
     required this.placeId,
+    required this.rating,
   });
 
   Map<String, dynamic> toMap() {
@@ -58,6 +61,7 @@ class RestaurantSummary {
       'vicinity': vicinity,
       'photo': photo,
       'placeId': placeId,
+      'rating': rating,
     };
   }
 
@@ -67,6 +71,7 @@ class RestaurantSummary {
       vicinity: map['vicinity'] as String,
       photo: map['photo'] as String,
       placeId: map['placeId'] as String,
+      rating: map['rating'] as double,
     );
   }
 }

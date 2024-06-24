@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
-import 'package:savoir/features/search/model/place.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 
 class RestaurantDetailsInfoTab extends StatelessWidget {
-  final Restaurant restaurant;
+  final RestaurantSummary restaurant;
   final RestaurantDetails details;
   const RestaurantDetailsInfoTab({
     super.key,

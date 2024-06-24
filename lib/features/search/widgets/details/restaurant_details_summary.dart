@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/widgets/rating.dart';
-import 'package:savoir/features/search/model/place.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 
 class RestaurantDetailsSummary extends StatelessWidget {
-  final Restaurant restaurant;
-  const RestaurantDetailsSummary({super.key, required this.restaurant});
+  final RestaurantSummary restaurant;
+  const RestaurantDetailsSummary({
+    super.key,
+    required this.restaurant,
+  });
 
   @override
   Widget build(BuildContext context) {

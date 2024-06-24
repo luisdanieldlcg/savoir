@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/features/favorites/controller/favorites_controller.dart';
 import 'package:savoir/features/favorites/tabs/favorite_restaurants_tab.dart';
-import 'package:savoir/features/search/model/controller/restaurant_map_controller.dart';
+import 'package:savoir/router.dart';
 
 class FavoritesView extends ConsumerStatefulWidget {
   const FavoritesView({super.key});
@@ -38,7 +38,11 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
                   FavoriteRestaurantsTab(
                     favorites: favorites.restaurants,
                     onTap: (restaurant) {
-                      
+                      Navigator.pushNamed(
+                        context,
+                        AppRouter.restaurantDetails,
+                        arguments: restaurant,
+                      );
                     },
                     onRemove: (restaurant) =>
                         ref.read(favoritesControllerProvider.notifier).toggleFavorite(
@@ -46,6 +50,7 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
                               name: restaurant.name,
                               photo: restaurant.photo,
                               vicinity: restaurant.vicinity,
+                              rating: restaurant.rating,
                             ),
                   ),
                   Text("Platos favoritos"),

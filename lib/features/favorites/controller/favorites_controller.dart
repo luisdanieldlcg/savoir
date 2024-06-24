@@ -34,6 +34,7 @@ class FavoritesController extends StateNotifier<bool> {
     required String name,
     required String photo,
     required String vicinity,
+    required double rating,
   }) async {
     _logger.i("Updating favorite place: $placeId");
 
@@ -53,6 +54,7 @@ class FavoritesController extends StateNotifier<bool> {
                   vicinity: vicinity,
                   photo: photo,
                   placeId: placeId,
+                  rating: rating,
                 ),
               ],
       );

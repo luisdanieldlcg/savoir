@@ -4,18 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/theme.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/favorites/controller/favorites_controller.dart';
-import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/widgets/details/restaurant_favorite_button.dart';
 
 class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  final Restaurant restaurant;
-  final String restaurantImage;
-
+  final RestaurantSummary summary;
   const RestaurantDetailsAppBar({
     super.key,
-    required this.restaurant,
-    required this.restaurantImage,
+    required this.summary,
   });
 
   @override
@@ -42,7 +39,7 @@ class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWid
             bottomRight: Radius.circular(10),
           ),
           image: DecorationImage(
-            image: NetworkImage(restaurantImage),
+            image: NetworkImage(summary.photo),
             fit: BoxFit.cover,
           ),
         ),
@@ -50,13 +47,14 @@ class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWid
       actions: [
         RestaurantFavoriteButton(
           isFavorite:
-              favoriteState.restaurants.any((element) => element.placeId == restaurant.placeId),
+              favoriteState.restaurants.any((element) => element.placeId == summary.placeId),
           onPressed: () {
             ref.read(favoritesControllerProvider.notifier).toggleFavorite(
-                  placeId: restaurant.placeId,
-                  name: restaurant.name,
-                  photo: restaurantImage,
-                  vicinity: restaurant.vicinity,
+                  placeId: summary.placeId,
+                  name: summary.name,
+                  photo: summary.photo,
+                  vicinity: summary.vicinity,
+                  rating: summary.rating,
                 );
           },
         ),

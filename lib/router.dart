@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/features/auth/view/password_reset_view.dart';
 import 'package:savoir/features/auth/view/signup_view.dart';
@@ -43,8 +44,8 @@ class AppRouter {
         return _createRoute(const RestaurantSearchView());
       case restaurantDetails:
         final args = settings.arguments;
-        if (args is Restaurant) {
-          return _createRoute(RestaurantDetailsView(restaurant: args));
+        if (args is RestaurantSummary) {
+          return _createRoute(RestaurantDetailsView(summary: args));
         }
         return _createRoute(UnknownRouteScreen(targetRoute: name));
       default:

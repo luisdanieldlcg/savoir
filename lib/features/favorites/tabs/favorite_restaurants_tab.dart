@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
 
 class FavoriteRestaurantsTab extends StatelessWidget {
@@ -24,13 +25,19 @@ class FavoriteRestaurantsTab extends StatelessWidget {
       itemBuilder: (context, index) {
         final restaurant = favorites[index];
         return ListTile(
+          isThreeLine: true,
           leading: CircleAvatar(
+            radius: 30,
             backgroundImage: NetworkImage(restaurant.photo),
           ),
           title: Text(restaurant.name),
-          subtitle: Text(restaurant.vicinity),
+          subtitle: Text(
+            restaurant.vicinity,
+            maxLines: 2,
+            style: const TextStyle(color: Colors.grey),
+          ),
           trailing: IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: AppTheme.primaryColor),
             onPressed: () => onRemove(restaurant),
           ),
           onTap: () => onTap(restaurant),

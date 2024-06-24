@@ -6,6 +6,7 @@ import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/three_dot_progress_indicator.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/favorites/controller/favorites_controller.dart';
 import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
@@ -15,11 +16,12 @@ import 'package:savoir/features/search/widgets/details/restaurant_details_appbar
 import 'package:savoir/features/search/widgets/details/restaurant_details_summary.dart';
 
 class RestaurantDetailsView extends ConsumerStatefulWidget {
-  final Restaurant restaurant;
+  // final Restaurant restaurant;
 
+  final RestaurantSummary summary;
   const RestaurantDetailsView({
     super.key,
-    required this.restaurant,
+    required this.summary,
   });
 
   @override
@@ -43,22 +45,17 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantImage = widget.restaurant.photos.isEmpty
-        ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
-        : photoFromReferenceGoogleAPI(widget.restaurant.photos[0].photoReference);
-    _logger.i("Passing placeId: ${widget.restaurant.placeId}");
-    final details = ref.watch(restaurantDetailsProvider(widget.restaurant.placeId));
+    final details = ref.watch(restaurantDetailsProvider(widget.summary.placeId));
     final updatingFavorite = ref.watch(favoritesControllerProvider);
 
     return Scaffold(
       appBar: RestaurantDetailsAppBar(
-        restaurantImage: restaurantImage,
-        restaurant: widget.restaurant,
+        summary: widget.summary,
       ),
       body: Column(
         children: [
           const SizedBox(height: 20),
-          RestaurantDetailsSummary(restaurant: widget.restaurant),
+          RestaurantDetailsSummary(restaurant: widget.summary),
           const SizedBox(height: 20),
           DefaultTabController(
             length: 3,
@@ -105,7 +102,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                               children: [
                                 Center(child: Text("Menú")),
                                 RestaurantDetailsInfoTab(
-                                  restaurant: widget.restaurant,
+                                  restaurant: widget.summary,
                                   details: restaurantDetails,
                                 ),
                                 RestaurantReviewsTab(details: restaurantDetails),
