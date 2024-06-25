@@ -132,7 +132,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                     Stack(
                       children: [
                         SizedBox(
-                          height: 500,
+                          height: 420,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: TabBarView(
@@ -166,7 +166,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                 error: err.toString(),
                 stackTrace: stack.toString(),
               ),
-              loading: () => Center(child: CircularProgressIndicator()),
+              loading: () => ThreeDotProgressIndicator(),
             ),
           ),
         ],

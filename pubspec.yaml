@@ -46,6 +46,7 @@ dependencies:
   location: ^6.0.2
   logger: ^2.3.0
   quickalert: ^1.1.0
+  shimmer: ^3.0.0
   smooth_page_indicator: ^1.1.0
   url_launcher: ^6.3.0
   widget_mask: ^1.0.0+0

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/util.dart';
+import 'package:savoir/common/widgets/shimmer_list.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
 import 'package:savoir/features/search/widgets/search/search_appbar.dart';
@@ -17,7 +18,7 @@ class SearchView extends ConsumerWidget {
     return Scaffold(
       appBar: SearchAppBar(),
       body: map.loading
-          ? const Center(child: CircularProgressIndicator())
+          ? ShimmerList(itemCount: 5)
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: ListView(

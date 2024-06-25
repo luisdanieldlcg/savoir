@@ -20,17 +20,15 @@ class RestaurantDetailsSummary extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 6),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.location_on, color: AppTheme.primaryColor),
-            Text(
-              restaurant.vicinity,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+
+        ListTile(
+          leading: Icon(Icons.location_on, color: AppTheme.primaryColor),
+          title: Text(
+            restaurant.vicinity,
+            style: const TextStyle(
+              fontSize: 16,
             ),
-          ],
+          ),
         ),
         const SizedBox(height: 6),
         // rating
