@@ -7,7 +7,7 @@ import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
-import 'package:savoir/features/search/model/controller/restaurant_map_controller.dart';
+import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
 import 'package:savoir/features/search/widgets/map/map_modal.dart';
 import 'package:savoir/features/search/widgets/map/map_popup.dart';
 import 'package:savoir/features/search/widgets/map/map_refresh.dart';

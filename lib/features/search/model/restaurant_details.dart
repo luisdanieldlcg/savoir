@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:savoir/common/constants.dart';
 
 class RestaurantDetails {
@@ -5,7 +6,7 @@ class RestaurantDetails {
   final String internationalPhoneNumber;
   final String? website;
   final OpeningHours? openingHours;
-  final List<Review> reviews;
+  final List<RestaurantComment> reviews;
   const RestaurantDetails({
     required this.editorialSummary,
     required this.internationalPhoneNumber,
@@ -35,9 +36,25 @@ class RestaurantDetails {
           ? OpeningHours.fromMap(map['opening_hours'] as Map<String, dynamic>)
           : null,
       reviews: map['reviews'] == null || map['reviews'].isEmpty
-          ? <Review>[]
-          : List<Review>.from((map['reviews'] as List<dynamic>)
-              .map((e) => Review.fromMap(e as Map<String, dynamic>))),
+          ? <RestaurantComment>[]
+          : List<RestaurantComment>.from((map['reviews'] as List<dynamic>)
+              .map((e) => RestaurantComment.fromMap(e as Map<String, dynamic>))),
+    );
+  }
+
+  RestaurantDetails copyWith({
+    EditorialSummary? editorialSummary,
+    String? internationalPhoneNumber,
+    String? website,
+    OpeningHours? openingHours,
+    List<RestaurantComment>? reviews,
+  }) {
+    return RestaurantDetails(
+      editorialSummary: editorialSummary ?? this.editorialSummary,
+      internationalPhoneNumber: internationalPhoneNumber ?? this.internationalPhoneNumber,
+      website: website ?? this.website,
+      openingHours: openingHours ?? this.openingHours,
+      reviews: reviews ?? this.reviews,
     );
   }
 }
@@ -92,7 +109,7 @@ class OpeningHours {
   }
 }
 
-class Review {
+class RestaurantComment {
   final String authorName;
   final String profilePhotoUrl;
   final double rating;
@@ -100,7 +117,7 @@ class Review {
   final String text;
   final int time;
 
-  const Review({
+  const RestaurantComment({
     required this.authorName,
     required this.profilePhotoUrl,
     required this.rating,
@@ -120,8 +137,8 @@ class Review {
     };
   }
 
-  factory Review.fromMap(Map<String, dynamic> map) {
-    return Review(
+  factory RestaurantComment.fromMap(Map<String, dynamic> map) {
+    return RestaurantComment(
       authorName: map['author_name'] as String,
       profilePhotoUrl: map['profile_photo_url'] == null
           ? kDefaultAvatarImage

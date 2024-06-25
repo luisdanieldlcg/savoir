@@ -7,12 +7,14 @@ class PrimaryButton extends StatelessWidget {
   final double width;
   final double height;
   final bool disabled;
+  final IconData? rightIcon;
   const PrimaryButton({
     required this.text,
     required this.onPressed,
     this.width = double.infinity,
     this.height = 45,
     this.disabled = false,
+    this.rightIcon,
     super.key,
   });
 
@@ -23,10 +25,22 @@ class PrimaryButton extends StatelessWidget {
       height: height,
       child: TextButton(
         onPressed: disabled ? null : onPressed,
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+        child: rightIcon == null
+            ? Text(
+                text,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  const SizedBox(width: 12),
+                  Icon(rightIcon, color: Colors.white),
+                ],
+              ),
       ),
     );
   }

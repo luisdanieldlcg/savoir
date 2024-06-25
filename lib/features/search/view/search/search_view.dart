@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
-import 'package:savoir/features/search/model/controller/restaurant_map_controller.dart';
+import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
 import 'package:savoir/features/search/widgets/search/search_appbar.dart';
 import 'package:savoir/features/search/widgets/search/search_result.dart';
 import 'package:savoir/router.dart';

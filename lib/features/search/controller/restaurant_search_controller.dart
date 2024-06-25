@@ -3,8 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:savoir/common/constants.dart';
+import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/features/search/model/place_autocomplete.dart';
+import 'package:savoir/features/search/model/review.dart';
 
 final _logger = AppLogger.getLogger(SearchController);
 final autoCompleteProvider = FutureProvider.family((ref, query) async {
@@ -53,5 +55,30 @@ class SearchController extends StateNotifier<SearchState> {
     state = state.copyWith(loading: true);
     final autoComplete = await ref.read(autoCompleteProvider(query).future);
     state = state.copyWith(autocomplete: autoComplete, loading: false);
+  }
+
+  void publishComment({
+    required String review,
+    required int rating,
+    required String authorName,
+    required String profileImage,
+    required String placeId,
+  }) async {
+    try {
+      _logger.i('Publishing review for place: $placeId');
+      final model = Comment(
+        review: review,
+        date: DateTime.now(),
+        rating: rating,
+        authorName: authorName,
+        profileImage: profileImage,
+      );
+      await ref.read(databaseRepositoryProvider).addComment(placeId: placeId, comment: model);
+
+      _logger.i('Review published successfully');
+    } catch (e) {
+      _logger.e('Error publishing review: ${e.toString()}');
+      // stacktrace: ${e.stackTrace}');
+    }
   }
 }
