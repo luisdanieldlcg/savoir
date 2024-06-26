@@ -9,16 +9,16 @@ class MapPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
-      height: 42,
+      width: 43,
+      height: 43,
       child: Column(
         children: [
           Stack(
             children: [
               SvgPicture.asset(
                 "assets/images/popup.svg",
-                width: 42,
-                height: 42,
+                width: 43,
+                height: 43,
                 colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
                 fit: BoxFit.cover,
               ),

@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:savoir/common/util.dart';
+import 'package:savoir/features/search/model/place.dart';
+
 class FavoriteModel {
   final List<RestaurantSummary> restaurants;
   final String userId;
@@ -47,13 +50,24 @@ class RestaurantSummary {
   final String photo;
   final String placeId;
   final double rating;
-  RestaurantSummary({
+  const RestaurantSummary({
     required this.name,
     required this.vicinity,
     required this.photo,
     required this.placeId,
     required this.rating,
   });
+
+  RestaurantSummary.fromRestaurant(Restaurant restaurant)
+      : this(
+          name: restaurant.name,
+          vicinity: restaurant.vicinity,
+          photo: restaurant.photos.isEmpty
+              ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png'
+              : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
+          placeId: restaurant.placeId,
+          rating: restaurant.rating,
+        );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
@@ -50,10 +51,10 @@ class Profile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = getUserOrLogOut(ref, context);
-    return Center(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 40),
@@ -116,11 +117,26 @@ class Profile extends ConsumerWidget {
                                   ),
                                   onTap: () {
                                     if (setting["route"] == AppRouter.welcome) {
-                                      ref.watch(authRepositoryProvider).logOut();
-                                      Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        setting["route"] as String,
-                                        (route) => false,
+                                      QuickAlert.show(
+                                        context: context,
+                                        animType: QuickAlertAnimType.slideInUp,
+                                        type: QuickAlertType.confirm,
+                                        title: "Cerrar Sesión",
+                                        text: "¿Estás seguro de que deseas cerrar sesión?",
+                                        confirmBtnColor: AppTheme.primaryColor,
+                                        onConfirmBtnTap: () {
+                                          ref.watch(authRepositoryProvider).logOut();
+                                          Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            setting["route"] as String,
+                                            (route) => false,
+                                          );
+                                        },
+                                        onCancelBtnTap: () => Navigator.pop(context),
+                                        cancelBtnTextStyle:
+                                            TextStyle(color: Colors.black, fontSize: 18),
+                                        cancelBtnText: "Cancelar",
+                                        confirmBtnText: "Continuar",
                                       );
                                     } else {
                                       Navigator.pushNamed(

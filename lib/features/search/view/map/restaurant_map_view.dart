@@ -34,7 +34,9 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
     final popups = map.place.restaurants.map((restaurant) {
       return MarkerData(
         marker: Marker(
-          consumeTapEvents: true,
+          consumeTapEvents: false,
+          draggable: false,
+          anchor: const Offset(0.5, 0.5),
           onTap: () => ref.read(restaurantMapProvider.notifier).setFocus(restaurant),
           markerId: MarkerId(restaurant.name),
           position: LatLng(restaurant.geometry.location.lat, restaurant.geometry.location.lng),
@@ -46,13 +48,12 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
       );
     });
 
-    _logger.i('Camera position: $cameraPosition');
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
           height: 36,
           child: RoundedTextInput(
-            hintText: 'Search for restaurants',
+            hintText: 'Buscar restaurantes',
             leftIcon: Icon(Icons.search),
             onTap: () => Navigator.pushNamed(context, AppRouter.restaurantSearch),
             readonly: true,
@@ -69,7 +70,7 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                       zoomControlsEnabled: false,
                       initialCameraPosition: CameraPosition(
                         target: map.initialCameraPosition,
-                        zoom: 14,
+                        zoom: 16,
                       ),
                       onMapCreated: (GoogleMapController controller) {
                         ref.read(restaurantMapProvider.notifier).completeController(controller);
@@ -92,24 +93,29 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
                         markerId: MarkerId('user'),
                         position: LatLng(map.userLocation!.latitude!, map.userLocation!.longitude!),
                         infoWindow: InfoWindow(
-                          title: 'You are here',
+                          title: 'Estás aquí',
                         ),
                       ),
                       child: UserAvatar(
                         withBorder: true,
-                        radius: 20,
+                        size: 47,
                         imageSrc: user!.profilePicture,
                       ),
                     ),
                     ...popups,
                   ],
                 ),
+                if (map.showRefreshButton)
+                  Positioned(
+                    top: 55,
+                    right: 120,
+                    child: MapRefresh(
+                        onRefresh: () => ref
+                            .read(restaurantMapProvider.notifier)
+                            .refresh(cameraPosition!.target)),
+                  ),
                 if (map.focusedRestaurant != null) MapModal(restaurant: map.focusedRestaurant!),
                 MapResultCount(count: map.place.restaurants.length),
-                if (map.showRefreshButton)
-                  MapRefresh(
-                      onRefresh: () =>
-                          ref.read(restaurantMapProvider.notifier).refresh(cameraPosition!.target)),
               ],
             ),
     );

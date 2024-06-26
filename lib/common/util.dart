@@ -95,7 +95,7 @@ class ErrorScreen extends StatelessWidget {
 }
 
 UserModel? getUserOrLogOut(WidgetRef ref, context) {
-  final user = ref.read(userProvider);
+  final user = ref.watch(userProvider);
   if (user == null) {
     ref.read(authRepositoryProvider).logOut();
   }

@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/buttons.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
+import 'package:savoir/common/widgets/three_dot_progress_indicator.dart';
 import 'package:savoir/features/auth/controller/auth_controller.dart';
 import 'package:savoir/features/profile/widgets/personal_details_genres.dart';
 import 'package:savoir/features/profile/widgets/personal_details_header.dart';
@@ -40,7 +42,7 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
     super.initState();
 
     if (!widget.firstTime) {
-      final user = getUserOrLogOut(ref, context);
+      final user = ref.read(userProvider);
       if (user == null) return;
       _nameController = TextEditingController(text: user.firstName);
       _lastNameController = TextEditingController(text: user.lastName);
@@ -93,23 +95,26 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
     final loading = ref.watch(authControllerProvider);
     final user = getUserOrLogOut(ref, context);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        title: Text(
-          widget.firstTime ? "Completa tu perfil para continuar" : "Editar Perfil",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: loading
-          ? const PulseProgressIndicator()
-          : Center(
+    return loading
+        ? Scaffold(
+            body: ThreeDotProgressIndicator(
+            loadingText: "Actualizando perfil...",
+          ))
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppTheme.primaryColor,
+              title: Text(
+                widget.firstTime ? "Completa tu perfil para continuar" : "Editar Perfil",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: true,
+              iconTheme: IconThemeData(color: Colors.white),
+            ),
+            body: Center(
               child: ListView(
                 children: [
                   PersonalDetailsHeader(
@@ -195,7 +200,7 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
                 ],
               ),
             ),
-    );
+          );
   }
 
   void finish() {

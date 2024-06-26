@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:logger/logger.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
@@ -53,11 +54,25 @@ class StartUp extends ConsumerWidget {
             return const Home();
           },
           loading: () {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return Scaffold(
+                body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: SpinKitFadingCircle(
+                    color: Theme.of(context).primaryColor,
+                    size: 50.0,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Text(
+                    "Cargando...",
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            ));
           },
           error: (error, _) => ErrorScreen(error: error.toString()),
         );

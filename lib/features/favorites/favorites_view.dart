@@ -18,46 +18,55 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
     final favorites = ref.watch(favoriteProvider)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favoritos'),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 34.0),
+          child: const Text(
+            'Favoritos',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              dividerHeight: 0,
-              tabs: const [
-                Tab(text: 'Restaurantes'),
-                Tab(text: 'Platos'),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  FavoriteRestaurantsTab(
-                    favorites: favorites.restaurants,
-                    onTap: (restaurant) {
-                      Navigator.pushNamed(
-                        context,
-                        AppRouter.restaurantDetails,
-                        arguments: restaurant,
-                      );
-                    },
-                    onRemove: (restaurant) =>
-                        ref.read(favoritesControllerProvider.notifier).toggleFavorite(
-                              placeId: restaurant.placeId,
-                              name: restaurant.name,
-                              photo: restaurant.photo,
-                              vicinity: restaurant.vicinity,
-                              rating: restaurant.rating,
-                            ),
-                  ),
-                  Text("Platos favoritos"),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              TabBar(
+                dividerHeight: 0,
+                tabs: const [
+                  Tab(text: 'Restaurantes'),
+                  Tab(text: 'Platos'),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    FavoriteRestaurantsTab(
+                      favorites: favorites.restaurants,
+                      onTap: (restaurant) {
+                        Navigator.pushNamed(
+                          context,
+                          AppRouter.restaurantDetails,
+                          arguments: restaurant,
+                        );
+                      },
+                      onRemove: (restaurant) =>
+                          ref.read(favoritesControllerProvider.notifier).toggleFavorite(
+                                placeId: restaurant.placeId,
+                                name: restaurant.name,
+                                photo: restaurant.photo,
+                                vicinity: restaurant.vicinity,
+                                rating: restaurant.rating,
+                              ),
+                    ),
+                    Text("Platos favoritos"),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

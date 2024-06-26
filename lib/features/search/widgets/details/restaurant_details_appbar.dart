@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,18 +31,23 @@ class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWid
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      flexibleSpace: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
+      flexibleSpace: CachedNetworkImage(
+        imageUrl: summary.photo,
+        fit: BoxFit.cover,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
           ),
-          image: DecorationImage(
-            image: NetworkImage(summary.photo),
-            fit: BoxFit.cover,
-          ),
+        ),
+        placeholder: (context, url) => Container(
+          color: AppTheme.primaryColor,
         ),
       ),
       actions: [

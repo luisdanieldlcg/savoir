@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:savoir/common/util.dart';
-import 'package:savoir/common/widgets/shimmer_list.dart';
+import 'package:savoir/common/widgets/shimmers.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
 import 'package:savoir/features/search/widgets/search/search_appbar.dart';
@@ -40,19 +39,10 @@ class SearchView extends ConsumerWidget {
                   SearchResult(
                     restaurants: map.place.restaurants,
                     onTap: (restaurant) {
-                      final restaurantImage = restaurant.photos.isEmpty
-                          ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
-                          : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference);
                       return Navigator.pushNamed(
                         context,
                         AppRouter.restaurantDetails,
-                        arguments: RestaurantSummary(
-                          name: restaurant.name,
-                          vicinity: restaurant.vicinity,
-                          photo: restaurantImage,
-                          placeId: restaurant.placeId,
-                          rating: restaurant.rating,
-                        ),
+                        arguments: RestaurantSummary.fromRestaurant(restaurant),
                       );
                     },
                   ),

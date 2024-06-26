@@ -90,7 +90,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
       appBar: RestaurantDetailsAppBar(
         summary: widget.summary,
       ),
-      body: Column(
+      body: ListView(
         children: [
           const SizedBox(height: 20),
           RestaurantDetailsSummary(restaurant: widget.summary),
@@ -153,9 +153,11 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                         ),
                         if (updatingFavorite)
                           Positioned(
-                            bottom: 0,
+                            bottom: -70,
                             left: 150,
-                            child: ThreeDotProgressIndicator(),
+                            child: ThreeDotProgressIndicator(
+                              loadingText: '',
+                            ),
                           ),
                       ],
                     ),
@@ -166,7 +168,9 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                 error: err.toString(),
                 stackTrace: stack.toString(),
               ),
-              loading: () => ThreeDotProgressIndicator(),
+              loading: () => ThreeDotProgressIndicator(
+                loadingText: "Espere un momento...",
+              ),
             ),
           ),
         ],

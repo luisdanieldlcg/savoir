@@ -27,7 +27,7 @@ class _RestaurantSearchViewState extends ConsumerState<RestaurantSearchView> {
         title: SizedBox(
           height: 36,
           child: RoundedTextInput(
-            hintText: 'Search for restaurants',
+            hintText: 'Buscar restaurantes',
             leftIcon: Icon(Icons.search),
             onTap: () {},
             onChanged: ref.read(restaurantSearchProvider.notifier).update,

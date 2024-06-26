@@ -33,6 +33,7 @@ class SearchResult extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: NetworkImage(
+                        // TODO: add shimmer
                         restaurant.photos.isEmpty
                             ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
                             : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),

@@ -1,66 +1,54 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
 
 class UserAvatar extends StatelessWidget {
   final String imageSrc;
-  final double radius;
+  final double size;
   final bool withBorder;
   final bool zoomOnTap;
   const UserAvatar({
     super.key,
     required this.imageSrc,
-    this.radius = 62,
+    this.size = 128,
     this.withBorder = true,
     this.zoomOnTap = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          PageRouteBuilder(
-            opaque: false,
-            barrierDismissible: true,
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Hero(
-                  tag: imageSrc,
-                  child: Material(
-                    color: Colors.black.withOpacity(0.9),
-                    child: Center(
-                      child: Image.network(
-                        imageSrc,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
+    return CachedNetworkImage(
+      imageUrl: imageSrc,
+
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+            border: Border.all(
+              color: withBorder ? AppTheme.secondaryColor : Colors.transparent,
+              width: 1,
+            ),
           ),
         );
       },
-      child: CircleAvatar(
-        radius: radius,
-        backgroundColor: AppTheme.primaryColor,
-        child: Hero(
-          tag: imageSrc,
-          child: ClipOval(
-            child: SizedBox.fromSize(
-              size: withBorder ? Size.fromRadius(radius - 2) : Size.fromRadius(radius),
-              child: Image.network(
-                imageSrc,
-                fit: BoxFit.cover,
-              ),
-            ),
+
+      // circular progress indicator with white red color slim
+      placeholder: (context, url) {
+        return SizedBox(
+          width: size,
+          height: size,
+          child: CircularProgressIndicator(
+            color: AppTheme.primaryColor,
+            strokeWidth: 2,
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
