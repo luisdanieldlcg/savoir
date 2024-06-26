@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/widgets/buttons.dart';
 import 'package:savoir/common/widgets/pulse_progress_indicator.dart';
 import 'package:savoir/common/widgets/text_input.dart';
@@ -18,7 +17,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _usernameOrEmail = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _rememberMe = false;
   bool _buttonEnabled = false;
 
   @override
@@ -50,11 +48,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Form(
                 key: _formKey,
-                onChanged: () {
-                  setState(() {
-                    _buttonEnabled = _formKey.currentState!.validate();
-                  });
-                },
+                onChanged: () => setState(() => _buttonEnabled = _formKey.currentState!.validate()),
                 child: ListView(
                   children: [
                     const SizedBox(height: 44),
@@ -93,44 +87,17 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       keyboardType: TextInputType.visiblePassword,
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              value: _rememberMe,
-                              onChanged: (value) {
-                                setState(() {
-                                  _rememberMe = value!;
-                                });
-                              },
-                            ),
-                            const Text(
-                              "Recuérdame",
-                              style: TextStyle(
-                                color: AppTheme.primaryColor,
-                              ),
-                            ),
-                          ],
+                    InkWell(
+                      onTap: () {
+                        openRecoveryModal(context);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "¿Olvidaste tu contraseña?",
+                          style: TextStyle(color: Theme.of(context).colorScheme.primary),
                         ),
-                        InkWell(
-                          onTap: () {
-                            openRecoveryModal(context);
-                          },
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "¿Olvidaste tu contraseña?",
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                     const SizedBox(height: 30),
                     PrimaryButton(
