@@ -151,14 +151,15 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                             ),
                           ),
                         ),
-                        if (updatingFavorite)
-                          Positioned(
-                            bottom: -70,
-                            left: 150,
-                            child: ThreeDotProgressIndicator(
-                              loadingText: '',
-                            ),
-                          ),
+                        // TODO: consider adding a loading indicator here or not
+                        // if (updatingFavorite)
+                        //   Positioned(
+                        //     bottom: 0,
+                        //     left: 150,
+                        //     child: ThreeDotProgressIndicator(
+                        //       loadingText: '',
+                        //     ),
+                        //   ),
                       ],
                     ),
                   ],
@@ -175,6 +176,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
           ),
         ],
       ),
+      // loading indicator on bottom
     );
   }
 }
