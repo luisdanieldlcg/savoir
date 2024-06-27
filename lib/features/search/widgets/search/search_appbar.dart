@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
+import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
 import 'package:savoir/router.dart';
 
@@ -11,11 +12,8 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       scrolledUnderElevation: 0,
       title: Padding(
-        padding: const EdgeInsets.only(bottom: 32),
-        child: const Text(
-          'Explora',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+        padding: const EdgeInsets.only(bottom: 64),
+        child: title('Búsqueda'),
       ),
       toolbarHeight: 144,
       titleSpacing: 18,

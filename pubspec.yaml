@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.3.1
   cloud_firestore: ^5.0.1
   cupertino_icons: ^1.0.6
   custom_map_markers: ^0.0.2+1
@@ -42,6 +43,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.1
   google_maps_flutter: ^2.7.0
+  html: ^0.15.4
   image_picker: ^1.1.2
   location: ^6.0.2
   logger: ^2.3.0
@@ -50,7 +52,6 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   url_launcher: ^6.3.0
   widget_mask: ^1.0.0+0
-  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_lints: ^3.0.0

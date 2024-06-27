@@ -43,232 +43,122 @@ class _RestaurantReviewsTabState extends ConsumerState<RestaurantReviewsTab> {
         onPressed: () => openModal(context, user),
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: ListView.builder(
-          itemCount: widget.details.reviews.length,
-          itemBuilder: (context, index) {
-            final review = widget.details.reviews[index];
-            return CachedNetworkImage(
-              imageUrl: review.profilePhotoUrl,
-              imageBuilder: (context, imageProvider) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    ListTile(
-                      isThreeLine: true,
-                      leading: UserAvatar(
-                        imageSrc: review.profilePhotoUrl,
-                        size: 55,
-                      ),
-                      title: Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 120,
-                                child: Text(
-                                  review.authorName,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                review.relativeTimeDescription,
+        itemCount: widget.details.reviews.length,
+        itemBuilder: (context, index) {
+          final review = widget.details.reviews[index];
+          return CachedNetworkImage(
+            imageUrl: review.profilePhotoUrl,
+            imageBuilder: (context, imageProvider) {
+              return Column(
+                children: [
+                  const SizedBox(height: 16),
+                  ListTile(
+                    isThreeLine: true,
+                    leading: UserAvatar(
+                      imageSrc: review.profilePhotoUrl,
+                      size: 55,
+                    ),
+                    title: Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              child: Text(
+                                review.authorName,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: AppTheme.primaryColor,
-                                size: 16,
-                              ),
-                              Text(
-                                review.rating.toString(),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            review.text,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black54,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 5),
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(review.authorName),
-                                    content: Text(review.text),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Cerrar"),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Text(
-                              "Ver más",
+                            Spacer(),
+                            Text(
+                              review.relativeTimeDescription,
                               style: const TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.primaryColor,
+                                color: Colors.black54,
                               ),
                             ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: AppTheme.primaryColor,
+                              size: 16,
+                            ),
+                            Text(
+                              review.rating.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          review.text,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
                           ),
-                        ],
-                      ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(review.authorName),
+                                  content: Text(review.text),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Cerrar"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "Ver más",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppTheme.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.black12,
-                    ),
-                  ],
-                );
-              },
-              placeholder: (context, url) => ShimmerCompact(index: index),
-            );
-          }),
-      // body: ListView.builder(
-      //   itemCount: widget.details.reviews.length,
-      //   itemBuilder: (context, index) {
-      //     final review = widget.details.reviews[index];
-      //     return Column(
-      //       children: [
-      //         ListTile(
-      //           isThreeLine: true,
-      //           leading: CircleAvatar(
-      //             backgroundImage: NetworkImage(review.profilePhotoUrl),
-      //           ),
-      //           title: Column(
-      //             children: [
-      //               Row(
-      //                 children: [
-      //                   SizedBox(
-      //                     width: 170,
-      //                     child: Text(
-      //                       review.authorName,
-      //                       style: const TextStyle(
-      //                         fontSize: 16,
-      //                         fontWeight: FontWeight.bold,
-      //                       ),
-      //                       overflow: TextOverflow.ellipsis,
-      //                     ),
-      //                   ),
-      //                   Spacer(),
-      //                   Text(
-      //                     review.relativeTimeDescription,
-      //                     style: const TextStyle(
-      //                       fontSize: 14,
-      //                       color: Colors.black54,
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //               Row(
-      //                 children: [
-      //                   Icon(
-      //                     Icons.star,
-      //                     color: AppTheme.primaryColor,
-      //                     size: 16,
-      //                   ),
-      //                   Text(
-      //                     review.rating.toString(),
-      //                     style: const TextStyle(
-      //                       fontSize: 14,
-      //                       color: Colors.black54,
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ],
-      //           ),
-      //           subtitle: Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               Text(
-      //                 review.text,
-      //                 style: const TextStyle(
-      //                   fontSize: 14,
-      //                   color: Colors.black54,
-      //                 ),
-      //                 maxLines: 2,
-      //                 overflow: TextOverflow.ellipsis,
-      //               ),
-      //               const SizedBox(height: 5),
-      //               GestureDetector(
-      //                 onTap: () {
-      //                   showDialog(
-      //                     context: context,
-      //                     builder: (context) {
-      //                       return AlertDialog(
-      //                         title: Text(review.authorName),
-      //                         content: Text(review.text),
-      //                         actions: [
-      //                           TextButton(
-      //                             onPressed: () {
-      //                               Navigator.pop(context);
-      //                             },
-      //                             child: Text("Cerrar"),
-      //                           ),
-      //                         ],
-      //                       );
-      //                     },
-      //                   );
-      //                 },
-      //                 child: Text(
-      //                   "Ver más",
-      //                   style: const TextStyle(
-      //                     fontSize: 14,
-      //                     color: AppTheme.primaryColor,
-      //                   ),
-      //                 ),
-      //               ),
-      //               const SizedBox(height: 5),
-      //             ],
-      //           ),
-      //         ),
-      //         // Divider
-      //         const Divider(
-      //           height: 1,
-      //           thickness: 1,
-      //           color: Colors.black12,
-      //         ),
-      //         const SizedBox(height: 10),
-      //       ],
-      //     );
-      //   },
-      // ),
+                  ),
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Colors.black12,
+                  ),
+                ],
+              );
+            },
+            placeholder: (context, url) => ShimmerCompact(index: index),
+          );
+        },
+      ),
     );
   }
 

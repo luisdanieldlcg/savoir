@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:html/parser.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 
@@ -11,6 +12,7 @@ import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/favorites/controller/favorites_controller.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_details_info_tab.dart';
+import 'package:savoir/features/search/view/details/tabs/restaurant_menu_tab.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_reviews_tab.dart';
 import 'package:savoir/features/search/widgets/details/restaurant_details_appbar.dart';
 import 'package:savoir/features/search/widgets/details/restaurant_details_summary.dart';
@@ -70,6 +72,7 @@ final restaurantDetailsProvider = FutureProvider.family<RestaurantDetails, Strin
       );
     },
   );
+
   final reviewsOnApi = restaurant.reviews;
   final allReviews = List<RestaurantComment>.from(reviewsOnDatabase)..addAll(reviewsOnApi);
   // sort reviews by date
@@ -84,17 +87,19 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
   @override
   Widget build(BuildContext context) {
     final details = ref.watch(restaurantDetailsProvider(widget.summary.placeId));
-    final updatingFavorite = ref.watch(favoritesControllerProvider);
+    // final updatingFavorite = ref.watch(favoritesControllerProvider);
 
     return Scaffold(
       appBar: RestaurantDetailsAppBar(
         summary: widget.summary,
       ),
+      // reservar mesa floating action button
+
       body: ListView(
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           RestaurantDetailsSummary(restaurant: widget.summary),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           DefaultTabController(
             length: 3,
             initialIndex: _selectedTab,
@@ -138,7 +143,9 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                             child: TabBarView(
                               physics: NeverScrollableScrollPhysics(),
                               children: [
-                                Center(child: Text("Menú")),
+                                RestaurantMenuTab(
+                                  details: restaurantDetails,
+                                ),
                                 RestaurantDetailsInfoTab(
                                   restaurant: widget.summary,
                                   details: restaurantDetails,

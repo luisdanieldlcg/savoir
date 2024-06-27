@@ -124,3 +124,10 @@ Future<File?> pickGaleryImage() async {
 String photoFromReferenceGoogleAPI(String photoReference) {
   return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReference&key=$kGoogleApiTestKey";
 }
+
+Widget title(String title) {
+  return Text(
+    title,
+    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  );
+}

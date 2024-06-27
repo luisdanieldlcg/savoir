@@ -19,8 +19,6 @@ class RestaurantDetailsSummary extends StatelessWidget {
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 6),
-
         ListTile(
           leading: Icon(Icons.location_on, color: AppTheme.primaryColor),
           title: Text(
@@ -30,7 +28,6 @@ class RestaurantDetailsSummary extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 6),
         // rating
         Center(
           child: Rating(
