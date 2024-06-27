@@ -66,7 +66,7 @@ class _RestaurantReviewsTabState extends ConsumerState<RestaurantReviewsTab> {
                           Row(
                             children: [
                               SizedBox(
-                                width: 155,
+                                width: 120,
                                 child: Text(
                                   review.authorName,
                                   style: const TextStyle(

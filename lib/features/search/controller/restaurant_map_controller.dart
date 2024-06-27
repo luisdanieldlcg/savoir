@@ -44,11 +44,9 @@ final userLocationProvider = FutureProvider<LocationData?>((ref) async {
   }
 });
 
-final nearbyRestaurants =
-    FutureProvider.family<Place, (double, double)>((ref, coords) async {
+final nearbyRestaurants = FutureProvider.family<Place, (double, double)>((ref, coords) async {
   final dio = Dio();
-  final nearbySearch =
-      "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+  final nearbySearch = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
       "?location=${coords.$1},${coords.$2}"
       "&radius=1500"
       "&type=restaurant"
@@ -96,8 +94,7 @@ class MapState {
     return MapState(
       place: place ?? this.place,
       userLocation: userLocation ?? this.userLocation,
-      initialCameraPosition:
-          initialCameraPosition ?? this.initialCameraPosition,
+      initialCameraPosition: initialCameraPosition ?? this.initialCameraPosition,
       focusedRestaurant: focusedRestaurant ?? this.focusedRestaurant,
       loading: loading ?? this.loading,
       showRefreshButton: showRefreshButton ?? this.showRefreshButton,
@@ -105,22 +102,19 @@ class MapState {
   }
 }
 
-final restaurantMapProvider =
-    StateNotifierProvider<RestaurantMapController, MapState>((ref) {
+final restaurantMapProvider = StateNotifierProvider<RestaurantMapController, MapState>((ref) {
   final userLocation = ref.watch(userLocationProvider);
   final state = userLocation.when(
     data: (LocationData? locationData) {
       if (locationData == null) {
         return const MapState.loading(false);
       }
-      final place = ref.watch(
-          nearbyRestaurants((locationData.latitude!, locationData.longitude!)));
+      final place = ref.watch(nearbyRestaurants((locationData.latitude!, locationData.longitude!)));
       return place.when(
         data: (p) {
           return MapState(
             place: p,
-            initialCameraPosition:
-                LatLng(locationData.latitude!, locationData.longitude!),
+            initialCameraPosition: LatLng(locationData.latitude!, locationData.longitude!),
             userLocation: locationData,
             loading: false,
           );
@@ -167,12 +161,11 @@ class RestaurantMapController extends StateNotifier<MapState> {
     state = state.copyWith(initialCameraPosition: position);
   }
 
-  void setFocus(Restaurant? restaurant) =>
-      state = state.copyWith(focusedRestaurant: restaurant);
+  void setFocus(Restaurant? restaurant) => state = state.copyWith(focusedRestaurant: restaurant);
 
   void refresh(LatLng cameraPos) async {
-    final place = await ref.refresh(
-        nearbyRestaurants((cameraPos.latitude, cameraPos.longitude)).future);
+    final place =
+        await ref.refresh(nearbyRestaurants((cameraPos.latitude, cameraPos.longitude)).future);
 
     state = state.copyWith(
       place: place,
