@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:html/parser.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 
@@ -9,7 +8,6 @@ import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/three_dot_progress_indicator.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
-import 'package:savoir/features/favorites/controller/favorites_controller.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_details_info_tab.dart';
 import 'package:savoir/features/search/view/details/tabs/restaurant_menu_tab.dart';
