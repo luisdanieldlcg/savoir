@@ -191,9 +191,33 @@ class _RestaurantReviewsTabState extends ConsumerState<RestaurantReviewsTab> {
                     size: 55,
                   ),
                   title: Text("${user.firstName} ${user.lastName}"),
-                  subtitle: Text(
-                    "Se mostrará públicamente en la app",
-                    style: TextStyle(color: Colors.black54),
+                  // subtitle: Text(
+                  //   "Se mostrará públicamente en la app",
+                  //   style: TextStyle(color: Colors.black54),
+                  // ),
+                  // add icon that shows the user that the name will be public
+                  subtitle: Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: "Se mostrará públicamente en la\n",
+                          style: const TextStyle(color: Colors.black54, height: 1.5),
+                          children: [
+                            TextSpan(
+                              text: "app ",
+                              style: const TextStyle(color: Colors.black54),
+                            ),
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.public,
+                                color: Colors.black54,
+                                size: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

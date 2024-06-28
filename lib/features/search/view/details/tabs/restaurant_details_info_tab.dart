@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savoir/common/theme.dart';
+import 'package:savoir/common/util.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 
@@ -11,6 +12,9 @@ class RestaurantDetailsInfoTab extends StatelessWidget {
     required this.restaurant,
     required this.details,
   });
+
+  void onPhoneNumberTapped(String phoneNumber) => launchExternalApp("tel:+$phoneNumber");
+  void onWebsiteTapped(String website) => launchExternalApp(website);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,7 @@ class RestaurantDetailsInfoTab extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         InkWell(
-          onTap: () {},
+          onTap: () => onPhoneNumberTapped(details.internationalPhoneNumber),
           child: ListTile(
             minTileHeight: 44,
             leading: Icon(Icons.phone, color: AppTheme.primaryColor),
@@ -53,10 +57,7 @@ class RestaurantDetailsInfoTab extends StatelessWidget {
         if (details.website != null)
           // this link should be clickable
           InkWell(
-            onTap: () {
-              // open the website
-              // TODO: implement launch url
-            },
+            onTap: () => onWebsiteTapped(details.website!),
             child: ListTile(
               minTileHeight: 44,
               leading: Icon(Icons.web, color: AppTheme.primaryColor),
@@ -73,15 +74,42 @@ class RestaurantDetailsInfoTab extends StatelessWidget {
         const SizedBox(height: 20),
         Text("Horarios", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
-        Text(
-          details.openingHours == null
-              ? "No hay información disponible"
-              : details.openingHours!.weekdayText.join("\n"),
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+        if (details.openingHours == null) ...{
+          const Text("No hay información disponible"),
+        } else ...{
+          DataTable(
+            border: TableBorder.all(color: Colors.grey.shade300),
+            dividerThickness: 0.5,
+            headingRowHeight: 40,
+            headingRowColor: WidgetStatePropertyAll(AppTheme.primaryColor),
+            headingTextStyle: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+            columns: const [
+              DataColumn(label: Text("Día")),
+              DataColumn(label: Text("Horario")),
+            ],
+            rows: details.openingHours == null
+                ? const [
+                    DataRow(cells: [
+                      DataCell(Text("No hay información disponible")),
+                      DataCell(Text("")),
+                    ]),
+                  ]
+                : details.openingHours!.weekdayText.map(
+                    (e) {
+                      final parts = e.split(": ");
+                      return DataRow(
+                        cells: [
+                          DataCell(Text(parts[0])),
+                          DataCell(Text(parts[1])),
+                        ],
+                      );
+                    },
+                  ).toList(),
           ),
-        ),
+        }
       ],
     );
   }

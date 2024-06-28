@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import 'package:savoir/common/providers.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _Utils {}
 
@@ -130,4 +130,17 @@ Widget title(String title) {
     title,
     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
   );
+}
+
+void launchExternalApp(String url) async {
+  try {
+    _logger.i("Launching external app with url: $url");
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+      _logger.i("External app launched successfully");
+    }
+  } catch (e) {
+    _logger.e("Error launching external app: $e");
+  }
 }

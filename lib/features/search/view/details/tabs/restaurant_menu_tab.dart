@@ -49,6 +49,10 @@ final menuScrapper = FutureProvider.family<List<Dish>, String>((ref, website) as
 
   final menuUrl = Uri.parse(website).resolve(menuLink).toString();
   _logger.i("Scrapping Menu link: $menuUrl");
+  if (!Uri.parse(menuUrl).isAbsolute) {
+    _logger.i("Invalid menu URL");
+    return const [];
+  }
 
   final menuResponse = await Dio().get(menuUrl);
   final menuDocument = parse(menuResponse.data);
@@ -109,25 +113,35 @@ class RestaurantMenuTab extends ConsumerWidget {
           ),
           body: SizedBox(
             height: 350,
-            child: ListView.builder(
-              itemCount: menu.length,
-              itemBuilder: (context, index) {
-                final dish = menu[index];
-                return Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.restaurant_menu),
-                      title: Text(dish.name),
-                      trailing: Text(
-                        '\$${dish.price.toStringAsFixed(2)}',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
+            child: menu.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.restaurant_menu, size: 100),
+                        Text("El menú no está disponible"),
+                      ],
                     ),
-                    ListTileDivider(),
-                  ],
-                );
-              },
-            ),
+                  )
+                : ListView.builder(
+                    itemCount: menu.length,
+                    itemBuilder: (context, index) {
+                      final dish = menu[index];
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.restaurant_menu),
+                            title: Text(dish.name),
+                            trailing: Text(
+                              '\$${dish.price.toStringAsFixed(2)}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          ),
+                          ListTileDivider(),
+                        ],
+                      );
+                    },
+                  ),
           ),
         );
       },

@@ -38,6 +38,11 @@
 	<string>Need to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Need to access your photo library</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	  <string>sms</string>
+	  <string>tel</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

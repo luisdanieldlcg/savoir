@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
 
@@ -31,8 +32,11 @@ class RestaurantDetailsView extends ConsumerStatefulWidget {
 final _logger = AppLogger.getLogger(RestaurantDetailsView);
 
 final restaurantDetailsProvider = FutureProvider.family<RestaurantDetails, String>((ref, id) async {
+  // final req =
+  //     "https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyCOX4I1w7rkKkYXOytX9jxsixmolpLb5rw";
+  // i wnat the reviews to be in spanish
   final req =
-      "https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyCOX4I1w7rkKkYXOytX9jxsixmolpLb5rw";
+      "https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&language=es&key=$kGoogleApiTestKey";
   _logger.i('Restaurant Details API Http Request: $req');
   final details = await Dio().get(req);
   _logger.i('Restaurant Details API Response: ${details.data}');
@@ -43,22 +47,22 @@ final restaurantDetailsProvider = FutureProvider.family<RestaurantDetails, Strin
       String relativeTimeDescription;
       if (DateTime.now().difference(reviewModel.date).inDays > 7) {
         relativeTimeDescription =
-            "${DateTime.now().difference(reviewModel.date).inDays ~/ 7} weeks ago";
+            "Hace ${DateTime.now().difference(reviewModel.date).inDays ~/ 7} semanas";
       } else {
-        relativeTimeDescription = "${DateTime.now().difference(reviewModel.date).inDays} days ago";
+        relativeTimeDescription = "Hace ${DateTime.now().difference(reviewModel.date).inDays} días";
       }
       if (DateTime.now().difference(reviewModel.date).inDays > 30) {
         relativeTimeDescription =
-            "${DateTime.now().difference(reviewModel.date).inDays ~/ 30} months ago";
+            "Hace ${DateTime.now().difference(reviewModel.date).inDays ~/ 30} meses";
       }
 
       if (DateTime.now().difference(reviewModel.date).inDays > 365) {
         relativeTimeDescription =
-            "${DateTime.now().difference(reviewModel.date).inDays ~/ 365} years ago";
+            "Hace ${DateTime.now().difference(reviewModel.date).inDays ~/ 365} años";
       }
 
-      if (relativeTimeDescription == "0 days ago") {
-        relativeTimeDescription = "Today";
+      if (relativeTimeDescription == "Hace 0 días") { 
+        relativeTimeDescription = "Hoy";
       }
       return RestaurantComment(
         text: reviewModel.review,
