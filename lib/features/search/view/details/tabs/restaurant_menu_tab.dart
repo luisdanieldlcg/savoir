@@ -30,7 +30,8 @@ final menuScrapper = FutureProvider.family<List<Dish>, String>((ref, website) as
   final menu = document.querySelectorAll('a').where((element) {
     final href = element.attributes['href'] ?? '';
     final text = element.text.toLowerCase();
-    return href.contains('menu') || text.contains('menu');
+    return href.contains('menu') ||
+        text.contains('menu') | text.contains("order") | text.contains("ordenar");
   });
   if (menu.isEmpty) {
     _logger.i("No menu found");
@@ -61,7 +62,7 @@ final menuScrapper = FutureProvider.family<List<Dish>, String>((ref, website) as
       if (priceValue != null && priceValue > 0.0) {
         // Remove the price from the item text to get the dish name
         final itemName = itemText.replaceAll(priceText, '').trim();
-        if (itemName.length > 30) {
+        if (itemName.length > 40) {
           _logger.i("Ignoring long dish: $itemName");
           continue;
         }
