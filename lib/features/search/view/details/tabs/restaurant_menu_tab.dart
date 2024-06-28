@@ -25,6 +25,12 @@ class Dish {
 
 final menuScrapper = FutureProvider.family<List<Dish>, String>((ref, website) async {
   _logger.i("Scraping website: $website");
+
+  // check if website is a valid URL
+  if (!Uri.parse(website).isAbsolute) {
+    _logger.i("Invalid URL");
+    return const [];
+  }
   final response = await Dio().get(website);
   final document = parse(response.data);
   final menu = document.querySelectorAll('a').where((element) {
