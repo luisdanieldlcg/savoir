@@ -9,6 +9,7 @@ class TextInput extends StatelessWidget {
   final InputDecoration? decoration;
   final VoidCallback? onTap;
   final bool readOnly;
+  final int? numberOfCharacters;
 
   const TextInput({
     super.key,
@@ -20,6 +21,7 @@ class TextInput extends StatelessWidget {
     this.decoration,
     this.onTap,
     this.readOnly = false,
+    this.numberOfCharacters,
   });
 
   @override
@@ -30,6 +32,7 @@ class TextInput extends StatelessWidget {
       keyboardType: keyboardType,
       onTap: onTap,
       readOnly: readOnly,
+      maxLength: numberOfCharacters,
       decoration: decoration ?? InputDecoration(hintText: hintText),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {

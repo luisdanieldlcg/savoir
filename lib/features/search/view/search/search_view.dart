@@ -36,16 +36,30 @@ class SearchView extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SearchResult(
-                    restaurants: map.place.restaurants,
-                    onTap: (restaurant) {
-                      return Navigator.pushNamed(
-                        context,
-                        AppRouter.restaurantDetails,
-                        arguments: RestaurantSummary.fromRestaurant(restaurant),
-                      );
-                    },
-                  ),
+                  map.searchResults.isEmpty
+                      ? Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            Text(
+                              "No se encontraron resultados",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
+                        )
+                      : SearchResult(
+                          restaurants: map.searchResults,
+                          onTap: (restaurant) {
+                            return Navigator.pushNamed(
+                              context,
+                              AppRouter.restaurantDetails,
+                              arguments: RestaurantSummary.fromRestaurant(restaurant),
+                            );
+                          },
+                        ),
                 ],
               ),
             ),

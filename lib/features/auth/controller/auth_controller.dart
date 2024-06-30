@@ -12,6 +12,7 @@ import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/router.dart';
+import 'package:savoir/startup.dart';
 
 final authControllerProvider = StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(
@@ -49,6 +50,7 @@ class AuthController extends StateNotifier<bool> {
       phone: phone,
       onSuccess: () {
         _logger.i("User registered successfully");
+
         Navigator.pushAndRemoveUntil(
           context,
           AppRouter.startUp(),
@@ -92,8 +94,8 @@ class AuthController extends StateNotifier<bool> {
           await repository.logOut();
         } else {
           _logger.i("User authenticated. Redirecting to home");
-          nav.pushAndRemoveUntil(
-            AppRouter.startUp(),
+          nav.pushNamedAndRemoveUntil(
+            AppRouter.home,
             (route) => false,
           );
         }

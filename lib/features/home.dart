@@ -20,6 +20,7 @@ class _HomeState extends State<Home> {
     FavoritesView(),
     Profile(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

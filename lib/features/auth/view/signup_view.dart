@@ -17,6 +17,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
   final _email = TextEditingController();
   final _phoneNumber = TextEditingController();
   final _password = TextEditingController();
+  final _confirmPassword = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _buttonEnabled = false;
 
@@ -26,6 +27,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
     _email.dispose();
     _phoneNumber.dispose();
     _password.dispose();
+    _confirmPassword.dispose();
     super.dispose();
   }
 
@@ -59,7 +61,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                   },
                   child: ListView(
                     children: [
-                      const SizedBox(height: 44),
+                      const SizedBox(height: 20),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -72,6 +74,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                         controller: _username,
                         hintText: "John Doe",
                         keyboardType: TextInputType.name,
+                        numberOfCharacters: 32,
                       ),
                       const SizedBox(height: 16),
                       Align(
@@ -87,7 +90,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                         hintText: "ejemplo@email.com",
                         keyboardType: TextInputType.emailAddress,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -101,7 +104,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                         hintText: "123-456-7890",
                         keyboardType: TextInputType.phone,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -116,12 +119,34 @@ class _SignupViewState extends ConsumerState<SignupView> {
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 24),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Confirmar contraseña",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextInput(
+                        controller: _confirmPassword,
+                        hintText: "Ingrese la misma contraseña",
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        validator: (value) {
+                          if (value != _password.text) {
+                            return "Las contraseñas no coinciden";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
                       PrimaryButton(
                         text: "Registrarse",
                         onPressed: () => attemptSignup(),
                         disabled: !_buttonEnabled,
                       ),
+                      const SizedBox(height: 24),
                     ],
                   ),
                 ),

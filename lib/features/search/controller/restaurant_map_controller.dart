@@ -61,6 +61,7 @@ final nearbyRestaurants = FutureProvider.family<Place, (double, double)>((ref, c
 @immutable
 class MapState {
   final Place place;
+  final List<Restaurant> searchResults;
   final LocationData? userLocation;
   final LatLng initialCameraPosition;
   final Restaurant? focusedRestaurant;
@@ -74,6 +75,7 @@ class MapState {
     this.focusedRestaurant,
     required this.loading,
     this.showRefreshButton = false,
+    this.searchResults = const [],
   });
 
   const MapState.loading(this.loading)
@@ -81,7 +83,8 @@ class MapState {
         userLocation = null,
         initialCameraPosition = const LatLng(0, 0),
         showRefreshButton = false,
-        focusedRestaurant = null;
+        focusedRestaurant = null,
+        searchResults = const [];
 
   MapState copyWith({
     Place? place,
@@ -90,6 +93,7 @@ class MapState {
     Restaurant? focusedRestaurant,
     bool? loading,
     bool? showRefreshButton,
+    List<Restaurant>? searchResults,
   }) {
     return MapState(
       place: place ?? this.place,
@@ -98,6 +102,7 @@ class MapState {
       focusedRestaurant: focusedRestaurant ?? this.focusedRestaurant,
       loading: loading ?? this.loading,
       showRefreshButton: showRefreshButton ?? this.showRefreshButton,
+      searchResults: searchResults ?? this.searchResults,
     );
   }
 }
@@ -117,6 +122,7 @@ final restaurantMapProvider = StateNotifierProvider<RestaurantMapController, Map
             initialCameraPosition: LatLng(locationData.latitude!, locationData.longitude!),
             userLocation: locationData,
             loading: false,
+            searchResults: p.restaurants,
           );
         },
         loading: () => const MapState.loading(true),
@@ -144,6 +150,11 @@ class RestaurantMapController extends StateNotifier<MapState> {
 
   void markRefresh() {
     state = state.copyWith(showRefreshButton: true);
+  }
+
+  void filterResults(String query) {
+    final results = state.place.restaurants.where((r) => r.name.toLowerCase().contains(query));
+    state = state.copyWith(searchResults: results.toList());
   }
 
   void completeController(GoogleMapController controller) {

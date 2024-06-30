@@ -47,18 +47,21 @@ class _OnboardingState extends State<Onboarding> {
               ? const SizedBox.shrink()
               : SafeArea(
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     alignment: const Alignment(-1, -1.0),
-                    child: Opacity(
-                      opacity: _currentPage == 2 ? 0 : 1,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, AppRouter.welcome);
-                        },
-                        child: const Text(
-                          'Saltar',
-                          style:
-                              TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Opacity(
+                        opacity: _currentPage == 2 ? 0 : 1,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushReplacementNamed(context, AppRouter.welcome);
+                          },
+                          child: const Text(
+                            'Omitir',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                          ),
                         ),
                       ),
                     ),

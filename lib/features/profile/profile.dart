@@ -6,6 +6,7 @@ import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/user_avatar.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/router.dart';
+import 'package:savoir/startup.dart';
 
 class Profile extends ConsumerWidget {
   const Profile({super.key});
@@ -125,7 +126,9 @@ class Profile extends ConsumerWidget {
                                         text: "¿Estás seguro de que deseas cerrar sesión?",
                                         confirmBtnColor: AppTheme.primaryColor,
                                         onConfirmBtnTap: () {
+                                          ref.invalidate(startUpProvider(user.uid));
                                           ref.watch(authRepositoryProvider).logOut();
+
                                           Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             setting["route"] as String,

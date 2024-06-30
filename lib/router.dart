@@ -6,7 +6,6 @@ import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/personal_details_page.dart';
-import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/view/details/restaurant_details_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_map_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_search_view.dart';
