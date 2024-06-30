@@ -70,7 +70,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                       const SizedBox(height: 10),
                       TextInput(
                         controller: _username,
-                        hintText: "Luis De La Cruz",
+                        hintText: "John Doe",
                         keyboardType: TextInputType.name,
                       ),
                       const SizedBox(height: 16),

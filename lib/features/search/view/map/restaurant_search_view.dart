@@ -55,7 +55,6 @@ class _RestaurantSearchViewState extends ConsumerState<RestaurantSearchView> {
                         final geometry = Geometry.fromMap(response.data["result"]["geometry"]);
                         _logger.i('Response: $geometry');
 
-
                         final map = ref.read(restaurantMapProvider.notifier);
                         map.moveCamera(LatLng(geometry.location.lat, geometry.location.lng));
                         map.refresh(LatLng(geometry.location.lat, geometry.location.lng));
