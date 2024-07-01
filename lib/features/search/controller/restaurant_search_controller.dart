@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/database_repository.dart';
 import 'package:savoir/common/logger.dart';
+import 'package:savoir/features/profile/view/account_statistics_view.dart';
 import 'package:savoir/features/search/model/place_autocomplete.dart';
 import 'package:savoir/features/search/model/review.dart';
 
@@ -73,7 +74,9 @@ class SearchController extends StateNotifier<SearchState> {
         authorName: authorName,
         profileImage: profileImage,
       );
+
       await ref.read(databaseRepositoryProvider).addComment(placeId: placeId, comment: model);
+      ref.invalidate(accountStatisticsViewProvider);
 
       _logger.i('Review published successfully');
     } catch (e) {

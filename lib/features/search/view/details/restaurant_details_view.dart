@@ -32,9 +32,6 @@ class RestaurantDetailsView extends ConsumerStatefulWidget {
 final _logger = AppLogger.getLogger(RestaurantDetailsView);
 
 final restaurantDetailsProvider = FutureProvider.family<RestaurantDetails, String>((ref, id) async {
-  // final req =
-  //     "https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&key=AIzaSyCOX4I1w7rkKkYXOytX9jxsixmolpLb5rw";
-  // i wnat the reviews to be in spanish
   final req =
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=$id&language=es&key=$kGoogleApiTestKey";
   _logger.i('Restaurant Details API Http Request: $req');
@@ -61,7 +58,7 @@ final restaurantDetailsProvider = FutureProvider.family<RestaurantDetails, Strin
             "Hace ${DateTime.now().difference(reviewModel.date).inDays ~/ 365} años";
       }
 
-      if (relativeTimeDescription == "Hace 0 días") { 
+      if (relativeTimeDescription == "Hace 0 días") {
         relativeTimeDescription = "Hoy";
       }
       return RestaurantComment(

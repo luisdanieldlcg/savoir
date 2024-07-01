@@ -10,7 +10,7 @@ import 'package:savoir/features/auth/model/user_model.dart';
 import 'package:savoir/features/auth/repository/auth_repository.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/onboarding/onboarding.dart';
-import 'package:savoir/features/profile/view/personal_details_page.dart';
+import 'package:savoir/features/profile/view/personal_details_view.dart';
 
 final startUpProvider = FutureProvider.family<UserModel?, String>((ref, uid) async {
   // Initialize and cache user app state

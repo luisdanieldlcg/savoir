@@ -52,25 +52,26 @@ class _PersonalDetailsViewState extends ConsumerState<PersonalDetailsView> {
       _lastNameController = TextEditingController();
       _birthDateController = TextEditingController();
     }
-
-    Future.delayed(Duration.zero, () {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Tu cuenta ha sido registrada con éxito",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            content: Text("Para continuar, por favor completa tu perfil."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("Entendido"),
-              ),
-            ],
-          );
-        },
-      );
-    });
+    if (widget.firstTime) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Tu cuenta ha sido registrada con éxito",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              content: Text("Para continuar, por favor completa tu perfil."),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("Entendido"),
+                ),
+              ],
+            );
+          },
+        );
+      });
+    }
   }
 
   @override

@@ -176,6 +176,7 @@ class AuthController extends StateNotifier<bool> {
         profilePicture: avatarUrl ?? user.profilePicture,
         profileComplete: true,
       );
+      
       _logger.i("Updating user profile: $updatedUser");
       await ref.watch(databaseRepositoryProvider).updateUser(updatedUser);
 

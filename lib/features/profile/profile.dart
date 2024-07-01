@@ -30,7 +30,7 @@ class Profile extends ConsumerWidget {
     {
       "title": "Ver estadísticas",
       "icon": Icons.bar_chart,
-      "route": AppRouter.home,
+      "route": AppRouter.accountStatistics,
     },
     {
       "title": "Favoritos",

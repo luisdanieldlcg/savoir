@@ -34,6 +34,19 @@ class DatabaseRepository {
     return favorite(userId).get().then((snapshot) => snapshot.data());
   }
 
+  Future<int> userCommentsCount(String authorName) {
+    return reviews().get().then((snapshot) {
+      return snapshot.docs.fold<int>(
+        0,
+        (previousValue, element) {
+          final review = element.data();
+          return previousValue +
+              review.comments.where((comment) => comment.authorName == authorName).length;
+        },
+      );
+    });
+  }
+
   Future<List<Comment>> readComments(String placeId) {
     return reviews().doc(placeId).get().then((snapshot) {
       if (snapshot.data() == null) {
@@ -50,9 +63,7 @@ class DatabaseRepository {
     final review = await reviews().doc(placeId).get();
     final reviewModel = review.data();
     if (reviewModel == null) {
-      return reviews()
-          .doc(placeId)
-          .set(ReviewModel(comments: [comment], placeId: placeId));
+      return reviews().doc(placeId).set(ReviewModel(comments: [comment], placeId: placeId));
     }
     return reviews().doc(placeId).set(
           reviewModel.copyWith(
@@ -76,12 +87,8 @@ class DatabaseRepository {
   }
 
   DocumentReference<FavoriteModel> favorite(String userId) {
-    return _database
-        .collection('favorites')
-        .doc(userId)
-        .withConverter<FavoriteModel>(
-          fromFirestore: (snapshot, _) =>
-              FavoriteModel.fromMap(snapshot.data()!),
+    return _database.collection('favorites').doc(userId).withConverter<FavoriteModel>(
+          fromFirestore: (snapshot, _) => FavoriteModel.fromMap(snapshot.data()!),
           toFirestore: (favorite, _) => favorite.toMap(),
         );
   }
