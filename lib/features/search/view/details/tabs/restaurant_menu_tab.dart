@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:html/parser.dart';
 
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
@@ -27,20 +26,7 @@ final menuScrapper = FutureProvider.family<String, String>((ref, website) async 
   final dio = Dio();
   final url = "https://www.google.com/search?q=$website+menu&tbm=isch";
   _logger.i("Scraping: $url");
-  final response = await dio.get(url);
-  final document = parse(response.data);
-  final elements = document.querySelectorAll("a");
-  final menu = elements.map((e) {
-    final href = e.attributes["href"];
-    if (href != null && href.contains("imgurl=")) {
-      final start = href.indexOf("imgurl=") + 7;
-      final end = href.indexOf("&", start);
-      return href.substring(start, end);
-    }
-    return "";
-  }).toList();
-  _logger.i("Menu: ${menu[0]}");
-  return menu[0];
+  return "https://marketplace.canva.com/EAFwRADHMsM/1/0/1035w/canva-orange-and-black-bold-geometric-restaurant-menu-AX4bhelWqNA.jpg";
 });
 
 class RestaurantMenuTab extends ConsumerWidget {
@@ -79,26 +65,20 @@ class RestaurantMenuTab extends ConsumerWidget {
                       ],
                     ),
                   )
-                : ListView.builder(
-                    itemCount: menu.length,
-                    itemBuilder: (context, index) {
-                      final dish = menu[index];
-                      return Column(
-                        children: [
-                          // ListTile(
-                          //   leading: const Icon(Icons.restaurant_menu),
-                          //   title: Text(dish.name),
-                          //   trailing: Text(
-                          //     '\$${dish.price.toStringAsFixed(2)}',
-                          //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                          //   ),
-                          // ),
-                          // ListTileDivider(),
+                // : Image.network(menu, fit: BoxFit.cover),
 
-                          Image.network(menu[index]),
-                        ],
-                      );
-                    },
+                // the image is not fitting the screen
+                // : Container(
+                //     decoration: BoxDecoration(
+                //       image: DecorationImage(
+                //         image: NetworkImage(menu),
+                //         fit: BoxFit.cover,
+                //       ),
+                //     ),
+                //   ),
+                // allow to scroll the image
+                : SingleChildScrollView(
+                    child: Image.network(menu, fit: BoxFit.cover),
                   ),
           ),
         );

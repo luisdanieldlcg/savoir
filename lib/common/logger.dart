@@ -20,15 +20,19 @@ class AppLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    final color = PrettyPrinter.defaultLevelColors[event.level];
+    // final color = PrettyPrinter.defaultLevelColors[event.level];
     final emoji = PrettyPrinter.defaultLevelEmojis[event.level]!;
     final emojiOutput = emoji.replaceAll(' ', '');
     final message = event.message;
     final time = DateTime.now();
+    // return [
+    //   color!(
+    //         "[${time.hour}:${time.minute}:${time.second}] [$className/${event.level.name.toUpperCase()}]$emojiOutput ",
+    //       ) +
+    //       message,
+    // ];
     return [
-      color!(
-            "[${time.hour}:${time.minute}:${time.second}] [$className/${event.level.name.toUpperCase()}]$emojiOutput ",
-          ) +
+      "[${time.hour}:${time.minute}:${time.second}] [$className/${event.level.name.toUpperCase()}]$emojiOutput " +
           message,
     ];
   }
