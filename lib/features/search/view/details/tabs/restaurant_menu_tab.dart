@@ -5,7 +5,6 @@ import 'package:html/parser.dart';
 
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
-import 'package:savoir/common/widgets/list_tile_divider.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 
 final _logger = AppLogger.getLogger(RestaurantMenuTab);
@@ -23,68 +22,25 @@ class Dish {
   String toString() => 'Dish(name: $name, price: $price)';
 }
 
-final menuScrapper = FutureProvider.family<List<Dish>, String>((ref, website) async {
-  _logger.i("Scraping website: $website");
-
-  // check if website is a valid URL
-  if (!Uri.parse(website).isAbsolute) {
-    _logger.i("Invalid URL");
-    return const [];
-  }
-  final response = await Dio().get(website);
+final menuScrapper = FutureProvider.family<String, String>((ref, website) async {
+  // scrap google search
+  final dio = Dio();
+  final url = "https://www.google.com/search?q=$website+menu&tbm=isch";
+  _logger.i("Scraping: $url");
+  final response = await dio.get(url);
   final document = parse(response.data);
-  final menu = document.querySelectorAll('a').where((element) {
-    final href = element.attributes['href'] ?? '';
-    final text = element.text.toLowerCase();
-    return href.contains('menu') ||
-        text.contains('menu') | text.contains("order") | text.contains("ordenar");
-  });
-  if (menu.isEmpty) {
-    _logger.i("No menu found");
-    return const [];
-  }
-
-  final menuLink = menu.first.attributes['href'];
-  if (menuLink == null) return const [];
-
-  final menuUrl = Uri.parse(website).resolve(menuLink).toString();
-  _logger.i("Scrapping Menu link: $menuUrl");
-  if (!Uri.parse(menuUrl).isAbsolute) {
-    _logger.i("Invalid menu URL");
-    return const [];
-  }
-
-  final menuResponse = await Dio().get(menuUrl);
-  final menuDocument = parse(menuResponse.data);
-
-  final menuItems = menuDocument.querySelectorAll('div');
-  // for each item, if the next sibling is a price, then it's a dish
-  final dishes = <Dish>[];
-  for (var i = 0; i < menuItems.length; i++) {
-    final item = menuItems[i];
-    final itemText = item.text.trim();
-
-    // Match prices in the form $4.00 or similar
-    final priceMatch = RegExp(r'\$[\d,]+\.\d{2}').firstMatch(itemText);
-    if (priceMatch != null) {
-      final priceText = priceMatch.group(0)!;
-      final priceValue = double.tryParse(priceText.replaceAll(RegExp(r'[^\d.]'), ''));
-      if (priceValue != null && priceValue > 0.0) {
-        // Remove the price from the item text to get the dish name
-        final itemName = itemText.replaceAll(priceText, '').trim();
-        if (itemName.length > 40) {
-          _logger.i("Ignoring long dish: $itemName");
-          continue;
-        }
-        if (itemName.isNotEmpty) {
-          _logger.i("Found dish: $itemName - $priceValue");
-          dishes.add(Dish(name: itemName, price: priceValue));
-        }
-      }
+  final elements = document.querySelectorAll("a");
+  final menu = elements.map((e) {
+    final href = e.attributes["href"];
+    if (href != null && href.contains("imgurl=")) {
+      final start = href.indexOf("imgurl=") + 7;
+      final end = href.indexOf("&", start);
+      return href.substring(start, end);
     }
-  }
-
-  return dishes;
+    return "";
+  }).toList();
+  _logger.i("Menu: ${menu[0]}");
+  return menu[0];
 });
 
 class RestaurantMenuTab extends ConsumerWidget {
@@ -129,15 +85,17 @@ class RestaurantMenuTab extends ConsumerWidget {
                       final dish = menu[index];
                       return Column(
                         children: [
-                          ListTile(
-                            leading: const Icon(Icons.restaurant_menu),
-                            title: Text(dish.name),
-                            trailing: Text(
-                              '\$${dish.price.toStringAsFixed(2)}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                            ),
-                          ),
-                          ListTileDivider(),
+                          // ListTile(
+                          //   leading: const Icon(Icons.restaurant_menu),
+                          //   title: Text(dish.name),
+                          //   trailing: Text(
+                          //     '\$${dish.price.toStringAsFixed(2)}',
+                          //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          //   ),
+                          // ),
+                          // ListTileDivider(),
+
+                          Image.network(menu[index]),
                         ],
                       );
                     },
