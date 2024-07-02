@@ -144,6 +144,7 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                               children: [
                                 RestaurantMenuTab(
                                   details: restaurantDetails,
+                                  restaurantName: widget.summary.name,
                                 ),
                                 RestaurantDetailsInfoTab(
                                   restaurant: widget.summary,

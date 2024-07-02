@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:html/parser.dart';
+import 'package:savoir/common/constants.dart';
 
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
@@ -21,19 +23,30 @@ class Dish {
   String toString() => 'Dish(name: $name, price: $price)';
 }
 
-final menuScrapper = FutureProvider.family<String, String>((ref, website) async {
-  // scrap google search
-  final dio = Dio();
-  final url = "https://www.google.com/search?q=$website+menu&tbm=isch";
-  _logger.i("Scraping: $url");
-  return "https://marketplace.canva.com/EAFwRADHMsM/1/0/1035w/canva-orange-and-black-bold-geometric-restaurant-menu-AX4bhelWqNA.jpg";
+final menuScrapper = FutureProvider.family<String, String>((ref, restaurantName) async {
+  const cseId = "f332eac292a7f486f";
+
+  final url =
+      'https://www.googleapis.com/customsearch/v1?q=${restaurantName.replaceAll(' ', '+')}+menu&cx=$cseId&searchType=image&key=$kGoogleApiTestKey';
+  _logger.i("Scrapping menu: $url");
+  final response = await Dio().get(url);
+  final items = response.data['items'] as List;
+  if (items.isEmpty) {
+    return "";
+  }
+  final firstItem = items.first;
+  final link = firstItem['link'] as String;
+  _logger.i("Found image: $link");
+  return link;
 });
 
 class RestaurantMenuTab extends ConsumerWidget {
   final RestaurantDetails details;
+  final String restaurantName;
   const RestaurantMenuTab({
     super.key,
     required this.details,
+    required this.restaurantName,
   });
 
   @override
@@ -41,9 +54,10 @@ class RestaurantMenuTab extends ConsumerWidget {
     if (details.website == null || details.website!.isEmpty) {
       return Center(child: Text("No hay menú disponible"));
     }
-    final scrapper = ref.watch(menuScrapper(details.website!));
+    final scrapper = ref.watch(menuScrapper(restaurantName));
     return scrapper.when(
       data: (menu) {
+        _logger.i("Displaying image from: $menu");
         return Scaffold(
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
@@ -65,20 +79,9 @@ class RestaurantMenuTab extends ConsumerWidget {
                       ],
                     ),
                   )
-                // : Image.network(menu, fit: BoxFit.cover),
-
-                // the image is not fitting the screen
-                // : Container(
-                //     decoration: BoxDecoration(
-                //       image: DecorationImage(
-                //         image: NetworkImage(menu),
-                //         fit: BoxFit.cover,
-                //       ),
-                //     ),
-                //   ),
-                // allow to scroll the image
-                : SingleChildScrollView(
-                    child: Image.network(menu, fit: BoxFit.cover),
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(menu),
                   ),
           ),
         );
