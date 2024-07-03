@@ -36,7 +36,6 @@ final menuScrapper = FutureProvider.family<String, String>((ref, restaurantName)
   }
   final firstItem = items.first;
   final link = firstItem['link'] as String;
-  _logger.i("Found image: $link");
   return link;
 });
 
@@ -79,9 +78,24 @@ class RestaurantMenuTab extends ConsumerWidget {
                       ],
                     ),
                   )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(menu),
+                : GestureDetector(
+                    // zoom
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: InteractiveViewer(child: Image.network(menu)),
+                          );
+                        },
+                      );
+                    },
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(menu),
+                      ),
+                    ),
                   ),
           ),
         );
