@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
+import 'package:shimmer/shimmer.dart';
 
 final _logger = AppLogger.getLogger(RestaurantMenuTab);
 
@@ -58,45 +60,57 @@ class RestaurantMenuTab extends ConsumerWidget {
       data: (menu) {
         _logger.i("Displaying image from: $menu");
         return Scaffold(
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              // Navigator.pushNamed(context, AppRouter.reservation);
-            },
-            label: const Text("Reservar mesa"),
-            icon: const Icon(Icons.calendar_today),
-            backgroundColor: AppTheme.primaryColor,
+          floatingActionButton: Column(
+            children: [
+              const Spacer(),
+              FloatingActionButton.extended(
+                onPressed: () {},
+                label: const Text("Reservar mesa"),
+                icon: const Icon(Icons.calendar_today),
+                backgroundColor: AppTheme.primaryColor,
+              ),
+            ],
           ),
-          body: SizedBox(
-            height: 350,
-            child: menu.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.restaurant_menu, size: 100),
-                        Text("El menú no está disponible"),
-                      ],
+          // the floating action button should be on the bottom right
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          body: GestureDetector(
+            onTap: () {
+              // zoom the image, effect
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: InteractiveViewer(
+                      child: Image.network(menu),
                     ),
-                  )
-                : GestureDetector(
-                    // zoom
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            child: InteractiveViewer(child: Image.network(menu)),
-                          );
-                        },
-                      );
-                    },
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(menu),
-                      ),
+                  );
+                },
+              );
+            },
+            child: CachedNetworkImage(
+              imageUrl: menu,
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),  
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
                     ),
                   ),
+                );
+              },
+              placeholder: (context, url) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    color: Colors.white,
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
         );
       },
