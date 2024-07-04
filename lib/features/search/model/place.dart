@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:savoir/common/logger.dart';
 
 class Place {
   final List<dynamic> htmlAttributions;
@@ -173,6 +174,8 @@ class Restaurant {
     };
   }
 
+  bool get isOpen => openingHours?.openNow ?? false;
+
   String toJson() => json.encode(toMap());
 
   @override
@@ -233,8 +236,8 @@ class Restaurant {
           map['iconBackgroundColor'] != null ? map['iconBackgroundColor'] as String : '',
       iconMaskBaseUri: map['iconMaskBaseUri'] != null ? map['iconMaskBaseUri'] as String : '',
       name: map['name'] as String,
-      openingHours: map['openingHours'] != null
-          ? OpeningHours.fromMap(map['openingHours'] as Map<String, dynamic>)
+      openingHours: map['opening_hours'] != null
+          ? OpeningHours.fromMap(map['opening_hours'] as Map<String, dynamic>)
           : null,
       photos: map["photos"] == null
           ? []
@@ -430,13 +433,14 @@ class OpeningHours {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'openNow': openNow,
+      'open_now': openNow,
     };
   }
 
   factory OpeningHours.fromMap(Map<String, dynamic> map) {
+    AppLogger.getLogger(OpeningHours).i('DESERIALIZING FROM MAP: $map');
     return OpeningHours(
-      openNow: map['openNow'] as bool,
+      openNow: map['open_now'] as bool,
     );
   }
 

@@ -115,6 +115,7 @@ final restaurantMapProvider = StateNotifierProvider<RestaurantMapController, Map
         return const MapState.loading(false);
       }
       final place = ref.watch(nearbyRestaurants((locationData.latitude!, locationData.longitude!)));
+
       return place.when(
         data: (p) {
           return MapState(

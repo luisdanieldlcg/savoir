@@ -7,6 +7,7 @@ import 'package:savoir/features/auth/view/welcome_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/account_statistics_view.dart';
 import 'package:savoir/features/profile/view/personal_details_view.dart';
+import 'package:savoir/features/profile/view/settings_view.dart';
 import 'package:savoir/features/search/view/details/restaurant_details_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_map_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_search_view.dart';
@@ -20,6 +21,7 @@ class AppRouter {
   static const home = "/home";
   static const personalDetails = "/personal-details";
   static const accountStatistics = "/account-statistics";
+  static const appSettings = "/app-settings";
   static const restaurantsMap = "/restaurants-map";
   static const restaurantSearch = "/restaurant-search";
   static const restaurantDetails = "/restaurant-details";
@@ -41,6 +43,8 @@ class AppRouter {
         return _createRoute(const PersonalDetailsView(firstTime: false));
       case accountStatistics:
         return _createRoute(const AccountStatisticsView());
+      case appSettings:
+        return _createRoute(const SettingsView());
       case restaurantsMap:
         return _createRoute(const RestaurantMapView());
       case restaurantSearch:

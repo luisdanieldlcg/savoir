@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:html/parser.dart';
 import 'package:savoir/common/constants.dart';
 
 import 'package:savoir/common/logger.dart';
@@ -11,19 +10,6 @@ import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:shimmer/shimmer.dart';
 
 final _logger = AppLogger.getLogger(RestaurantMenuTab);
-
-class Dish {
-  final String name;
-  final double price;
-
-  const Dish({
-    required this.name,
-    required this.price,
-  });
-
-  @override
-  String toString() => 'Dish(name: $name, price: $price)';
-}
 
 final menuScrapper = FutureProvider.family<String, String>((ref, restaurantName) async {
   const cseId = "f332eac292a7f486f";
@@ -92,7 +78,7 @@ class RestaurantMenuTab extends ConsumerWidget {
               imageBuilder: (context, imageProvider) {
                 return Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),  
+                    borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: imageProvider,
                       fit: BoxFit.cover,

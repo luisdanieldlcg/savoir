@@ -33,14 +33,9 @@ class Profile extends ConsumerWidget {
       "route": AppRouter.accountStatistics,
     },
     {
-      "title": "Favoritos",
-      "icon": Icons.favorite,
-      "route": AppRouter.home,
-    },
-    {
       "title": "Configuración",
       "icon": Icons.settings,
-      "route": AppRouter.home,
+      "route": AppRouter.appSettings,
     },
     {
       "title": "Cerrar Sesión",
