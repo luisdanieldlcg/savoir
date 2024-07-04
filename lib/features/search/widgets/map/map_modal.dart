@@ -47,7 +47,7 @@ class MapModal extends StatelessWidget {
                         child: Image.network(
                           restaurant.photos.isEmpty
                               ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
-                              : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
+                              : photoFromReferenceGoogleAPI(restaurant.photos[0].name),
                           width: 100,
                           height: double.infinity,
                           fit: BoxFit.cover,
@@ -69,7 +69,7 @@ class MapModal extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                restaurant.vicinity,
+                                restaurant.formattedAddress,
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: AppTheme.textColor,

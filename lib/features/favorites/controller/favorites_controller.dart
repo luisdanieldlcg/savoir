@@ -51,7 +51,7 @@ class FavoritesController extends StateNotifier<bool> {
                 ...favoriteModel.restaurants,
                 RestaurantSummary(
                   name: name,
-                  vicinity: vicinity,
+                  addr: vicinity,
                   photo: photo,
                   placeId: placeId,
                   rating: rating,

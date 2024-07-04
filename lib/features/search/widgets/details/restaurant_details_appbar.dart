@@ -59,7 +59,7 @@ class RestaurantDetailsAppBar extends ConsumerWidget implements PreferredSizeWid
                   placeId: summary.placeId,
                   name: summary.name,
                   photo: summary.photo,
-                  vicinity: summary.vicinity,
+                  vicinity: summary.addr,
                   rating: summary.rating,
                 );
           },

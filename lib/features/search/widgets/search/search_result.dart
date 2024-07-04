@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/rating.dart';
 import 'package:savoir/features/search/model/place.dart';
+import 'package:savoir/features/search/widgets/search/restaurant_search_result_labels.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SearchResult extends StatelessWidget {
@@ -23,6 +25,11 @@ class SearchResult extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final restaurant = restaurants[index];
+        final imageUrl = restaurant.photos.isEmpty
+            ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
+            : photoFromReferenceGoogleAPI(restaurant.photos[0].name);
+
+        AppLogger.getLogger(SearchResult).i('Image URL: $imageUrl');
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: GestureDetector(
@@ -30,13 +37,10 @@ class SearchResult extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // rotated label that indicates whether the restaurant is open or closed
                 Stack(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: restaurant.photos.isEmpty
-                          ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png"
-                          : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
+                      imageUrl: imageUrl,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -45,7 +49,24 @@ class SearchResult extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
+                        height: 185,
+                      ),
+                      errorWidget: (context, url, error) => Container(
                         height: 240,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.error, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text("Error cargando la imagen"),
+                            ],
+                          ),
+                        ),
                       ),
                       placeholder: (context, url) => SizedBox(
                         height: 240,
@@ -91,14 +112,16 @@ class SearchResult extends StatelessWidget {
                   title: Text(
                     restaurant.name,
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    maxLines: 1,
                   ),
                   subtitle: Row(
                     children: [
                       Icon(Icons.location_on, color: AppTheme.primaryColor),
                       Expanded(
                         child: Text(
-                          restaurant.vicinity,
+                          restaurant.formattedAddress,
                           overflow: TextOverflow.clip,
+                          maxLines: 2,
                         ),
                       ),
                     ],
@@ -106,6 +129,17 @@ class SearchResult extends StatelessWidget {
                   trailing: Rating(
                     rating: restaurant.rating,
                   ),
+                ),
+
+                // add restaurant type labels
+                RestaurantSearchResultLabels(
+                  restaurant: restaurant,
+                ),
+                const SizedBox(height: 8),
+                Divider(
+                  color: Colors.grey.shade300,
+                  thickness: 1,
+                  height: 1,
                 ),
               ],
             ),

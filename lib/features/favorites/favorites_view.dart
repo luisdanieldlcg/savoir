@@ -54,7 +54,7 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
                               placeId: restaurant.placeId,
                               name: restaurant.name,
                               photo: restaurant.photo,
-                              vicinity: restaurant.vicinity,
+                              vicinity: restaurant.addr,
                               rating: restaurant.rating,
                             ),
                   ),

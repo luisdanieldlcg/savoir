@@ -122,7 +122,7 @@ Future<File?> pickGaleryImage() async {
 }
 
 String photoFromReferenceGoogleAPI(String photoReference) {
-  return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReference&key=$kGoogleApiTestKey";
+  return "https://places.googleapis.com/v1/$photoReference/media?key=$kGoogleApiTestKey&maxWidthPx=400";
 }
 
 Widget title(String title) {

@@ -22,7 +22,7 @@ class RestaurantDetailsSummary extends StatelessWidget {
         ListTile(
           leading: Icon(Icons.location_on, color: AppTheme.primaryColor),
           title: Text(
-            restaurant.vicinity,
+            restaurant.addr,
             style: const TextStyle(
               fontSize: 16,
             ),

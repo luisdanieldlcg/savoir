@@ -46,13 +46,13 @@ class FavoriteModel {
 
 class RestaurantSummary {
   final String name;
-  final String vicinity;
+  final String addr;
   final String photo;
   final String placeId;
   final double rating;
   const RestaurantSummary({
     required this.name,
-    required this.vicinity,
+    required this.addr,
     required this.photo,
     required this.placeId,
     required this.rating,
@@ -61,10 +61,10 @@ class RestaurantSummary {
   RestaurantSummary.fromRestaurant(Restaurant restaurant)
       : this(
           name: restaurant.name,
-          vicinity: restaurant.vicinity,
+          addr: restaurant.formattedAddress,
           photo: restaurant.photos.isEmpty
               ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png'
-              : photoFromReferenceGoogleAPI(restaurant.photos[0].photoReference),
+              : photoFromReferenceGoogleAPI(restaurant.photos[0].name),
           placeId: restaurant.placeId,
           rating: restaurant.rating,
         );
@@ -72,7 +72,7 @@ class RestaurantSummary {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
-      'vicinity': vicinity,
+      'vicinity': addr,
       'photo': photo,
       'placeId': placeId,
       'rating': rating,
@@ -82,7 +82,7 @@ class RestaurantSummary {
   factory RestaurantSummary.fromMap(Map<String, dynamic> map) {
     return RestaurantSummary(
       name: map['name'] as String,
-      vicinity: map['vicinity'] as String,
+      addr: map['vicinity'] as String,
       photo: map['photo'] as String,
       placeId: map['placeId'] as String,
       rating: map['rating'] as double,

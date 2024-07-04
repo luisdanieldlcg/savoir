@@ -4,25 +4,30 @@ import 'package:savoir/common/theme.dart';
 import 'package:savoir/common/util.dart';
 import 'package:savoir/common/widgets/rounded_text_input.dart';
 import 'package:savoir/features/search/controller/restaurant_map_controller.dart';
+import 'package:savoir/features/search/widgets/search/restaurant_search_filters.dart';
 import 'package:savoir/router.dart';
 
 class SearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const SearchAppBar({super.key});
 
+  static const double toolbarHeight = 295;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final map = ref.watch(restaurantMapProvider);
     return AppBar(
       scrolledUnderElevation: 0,
       title: Padding(
-        padding: const EdgeInsets.only(bottom: 64),
+        padding: const EdgeInsets.only(top: 24),
         child: title('Búsqueda'),
       ),
-      toolbarHeight: 144,
+      toolbarHeight: 66,
       titleSpacing: 18,
       flexibleSpace: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -31,7 +36,7 @@ class SearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     hintText: 'Buscar restaurantes',
                     leftIcon: Icon(Icons.search),
                     onChanged: (value) {
-                      ref.read(restaurantMapProvider.notifier).filterResults(value);
+                      ref.read(restaurantMapProvider.notifier).filterByName(value);
                     },
                   ),
                 ),
@@ -46,6 +51,41 @@ class SearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            Text(
+              "Restaurantes cerca de ti",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "¡Déjà vu!",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+              ),
+            ),
+
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: RestaurantSearchFilters(),
+            ),
+            const SizedBox(height: 7),
+            Text(
+              // "${map.searchResults.length} resultados",
+              map.loading
+                  ? "Buscando restaurantes cercanos..."
+                  : "${map.searchResults.length} resultados",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            Divider(
+              color: Colors.grey.shade300,
+              thickness: 1,
+            ),
+            // result count
           ],
         ),
       ),
@@ -53,5 +93,5 @@ class SearchAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(144);
+  Size get preferredSize => const Size.fromHeight(toolbarHeight);
 }

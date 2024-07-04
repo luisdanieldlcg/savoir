@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 class AppLogger {
   static Logger getLogger(Type type) {
     return Logger(
+      
       printer: AppLogPrinter(
         className: type.toString(),
       ),

@@ -39,7 +39,7 @@ class _RestaurantMapViewState extends ConsumerState<RestaurantMapView> {
           anchor: const Offset(0.5, 0.5),
           onTap: () => ref.read(restaurantMapProvider.notifier).setFocus(restaurant),
           markerId: MarkerId(restaurant.name),
-          position: LatLng(restaurant.geometry.location.lat, restaurant.geometry.location.lng),
+          position: LatLng(restaurant.location.lat, restaurant.location.lng),
         ),
         child: MapPopup(
           isSelected: map.focusedRestaurant?.name == restaurant.name,

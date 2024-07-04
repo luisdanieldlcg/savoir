@@ -102,7 +102,7 @@ class FavoriteRestaurantsTab extends StatelessWidget {
                         ),
                         title: Text(restaurant.name),
                         subtitle: Text(
-                          restaurant.vicinity,
+                          restaurant.addr,
                           maxLines: 1,
                           style: const TextStyle(color: Colors.grey),
                           overflow: TextOverflow.ellipsis,

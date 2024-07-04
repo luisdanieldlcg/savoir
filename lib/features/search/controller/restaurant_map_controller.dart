@@ -46,13 +46,30 @@ final userLocationProvider = FutureProvider<LocationData?>((ref) async {
 
 final nearbyRestaurants = FutureProvider.family<Place, (double, double)>((ref, coords) async {
   final dio = Dio();
-  final nearbySearch = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-      "?location=${coords.$1},${coords.$2}"
-      "&radius=1500"
-      "&type=restaurant"
-      "&key=$kGoogleApiTestKey";
-  _logger.i('Places API Http Request: $nearbySearch');
-  final response = await dio.get(nearbySearch);
+  final response = await dio.post(
+    'https://places.googleapis.com/v1/places:searchNearby',
+    data: {
+      "includedTypes": ["restaurant"],
+      "maxResultCount": 20,
+      "locationRestriction": {
+        "circle": {
+          "center": {
+            "latitude": coords.$1,
+            "longitude": coords.$2,
+          },
+          "radius": 1500.0,
+        },
+      },
+    },
+    options: Options(
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': kGoogleApiTestKey,
+        'X-Goog-FieldMask': '*',
+      },
+    ),
+  );
+
   final place = Place.fromMap(response.data);
   _logger.i('Places API Response: ${place.restaurants}');
   return place;
@@ -79,7 +96,7 @@ class MapState {
   });
 
   const MapState.loading(this.loading)
-      : place = const Place(htmlAttributions: [], restaurants: [], status: ''),
+      : place = const Place(htmlAttributions: [], restaurants: []),
         userLocation = null,
         initialCameraPosition = const LatLng(0, 0),
         showRefreshButton = false,
@@ -127,8 +144,9 @@ final restaurantMapProvider = StateNotifierProvider<RestaurantMapController, Map
           );
         },
         loading: () => const MapState.loading(true),
-        error: (e, _) {
+        error: (e, stack) {
           _logger.e('Error getting nearby restaurants: $e');
+          _logger.e(stack.toString());
           return const MapState.loading(false);
         },
       );
@@ -153,7 +171,12 @@ class RestaurantMapController extends StateNotifier<MapState> {
     state = state.copyWith(showRefreshButton: true);
   }
 
-  void filterResults(String query) {
+  void filterByFn(bool Function(Restaurant) fn) {
+    final results = state.place.restaurants.where(fn);
+    state = state.copyWith(searchResults: results.toList());
+  }
+
+  void filterByName(String query) {
     final results = state.place.restaurants.where((r) => r.name.toLowerCase().contains(query));
     state = state.copyWith(searchResults: results.toList());
   }
