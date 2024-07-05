@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/providers.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
 import 'package:savoir/features/auth/model/user_model.dart';
+import 'package:savoir/features/search/controller/restaurant_reservation_controller.dart';
+import 'package:savoir/features/search/model/reservation.dart';
 import 'package:savoir/features/search/model/review.dart';
 
 final databaseRepositoryProvider = Provider((ref) {
@@ -17,6 +19,31 @@ class DatabaseRepository {
   const DatabaseRepository({
     required FirebaseFirestore database,
   }) : _database = database;
+
+  Future<void> addReservation(ReservationForm reservation, String userId) {
+    return reservations().doc(userId).get().then((snapshot) {
+      final reservationModel = snapshot.data();
+      if (reservationModel == null) {
+        return reservations().doc(userId).set(
+              ReservationModel(userId: userId, reservations: [reservation]),
+            );
+      }
+      return reservations().doc(userId).set(
+            reservationModel.copyWith(
+              reservations: [...reservationModel.reservations, reservation],
+            ),
+          );
+    });
+  }
+
+  Future<List<ReservationForm>> readReservations(String userId) {
+    return reservations().doc(userId).get().then((snapshot) {
+      if (snapshot.data() == null) {
+        return <ReservationForm>[];
+      }
+      return snapshot.data()!.reservations;
+    });
+  }
 
   Future<UserModel?> readUser(String uid) {
     return user(uid).get().then((snapshot) => snapshot.data());
@@ -76,6 +103,13 @@ class DatabaseRepository {
     return _database.collection('reviews').withConverter<ReviewModel>(
           fromFirestore: (snapshot, _) => ReviewModel.fromMap(snapshot.data()!),
           toFirestore: (review, _) => review.toMap(),
+        );
+  }
+
+  CollectionReference<ReservationModel> reservations() {
+    return _database.collection('reservations').withConverter<ReservationModel>(
+          fromFirestore: (snapshot, _) => ReservationModel.fromMap(snapshot.data()!),
+          toFirestore: (reservation, _) => reservation.toMap(),
         );
   }
 

@@ -4,10 +4,12 @@ import 'package:savoir/features/auth/view/login_view.dart';
 import 'package:savoir/features/auth/view/password_reset_view.dart';
 import 'package:savoir/features/auth/view/signup_view.dart';
 import 'package:savoir/features/auth/view/welcome_view.dart';
+import 'package:savoir/features/search/view/reservation/table_reservation_view.dart';
 import 'package:savoir/features/home.dart';
 import 'package:savoir/features/profile/view/account_statistics_view.dart';
 import 'package:savoir/features/profile/view/personal_details_view.dart';
 import 'package:savoir/features/profile/view/settings_view.dart';
+import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/view/details/restaurant_details_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_map_view.dart';
 import 'package:savoir/features/search/view/map/restaurant_search_view.dart';
@@ -25,6 +27,7 @@ class AppRouter {
   static const restaurantsMap = "/restaurants-map";
   static const restaurantSearch = "/restaurant-search";
   static const restaurantDetails = "/restaurant-details";
+  static const tableReservation = "/table-reservation";
 
   static Route<Widget> generateRoutes(RouteSettings settings) {
     final name = settings.name;
@@ -53,6 +56,12 @@ class AppRouter {
         final args = settings.arguments;
         if (args is RestaurantSummary) {
           return _createRoute(RestaurantDetailsView(summary: args));
+        }
+        return _createRoute(UnknownRouteScreen(targetRoute: name));
+      case tableReservation:
+        final args = settings.arguments;
+        if (args is RestaurantSummary) {
+          return _createRoute(TableReservationView(summary: args));
         }
         return _createRoute(UnknownRouteScreen(targetRoute: name));
       default:

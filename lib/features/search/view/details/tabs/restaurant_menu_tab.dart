@@ -6,7 +6,10 @@ import 'package:savoir/common/constants.dart';
 
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
+import 'package:savoir/features/auth/model/favorite_model.dart';
+import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
+import 'package:savoir/router.dart';
 import 'package:shimmer/shimmer.dart';
 
 final _logger = AppLogger.getLogger(RestaurantMenuTab);
@@ -29,11 +32,11 @@ final menuScrapper = FutureProvider.family<String, String>((ref, restaurantName)
 
 class RestaurantMenuTab extends ConsumerWidget {
   final RestaurantDetails details;
-  final String restaurantName;
+  final RestaurantSummary restaurant;
   const RestaurantMenuTab({
     super.key,
     required this.details,
-    required this.restaurantName,
+    required this.restaurant,
   });
 
   @override
@@ -41,7 +44,7 @@ class RestaurantMenuTab extends ConsumerWidget {
     if (details.website == null || details.website!.isEmpty) {
       return Center(child: Text("No hay menú disponible"));
     }
-    final scrapper = ref.watch(menuScrapper(restaurantName));
+    final scrapper = ref.watch(menuScrapper(restaurant.name));
     return scrapper.when(
       data: (menu) {
         _logger.i("Displaying image from: $menu");
@@ -50,14 +53,17 @@ class RestaurantMenuTab extends ConsumerWidget {
             children: [
               const Spacer(),
               FloatingActionButton.extended(
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  AppRouter.tableReservation,
+                  arguments: restaurant,
+                ),
                 label: const Text("Reservar mesa"),
                 icon: const Icon(Icons.calendar_today),
                 backgroundColor: AppTheme.primaryColor,
               ),
             ],
           ),
-          // the floating action button should be on the bottom right
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           body: GestureDetector(
             onTap: () {

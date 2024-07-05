@@ -86,13 +86,10 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
   @override
   Widget build(BuildContext context) {
     final details = ref.watch(restaurantDetailsProvider(widget.summary.placeId));
-    // final updatingFavorite = ref.watch(favoritesControllerProvider);
-
     return Scaffold(
       appBar: RestaurantDetailsAppBar(
         summary: widget.summary,
       ),
-      // reservar mesa floating action button
 
       body: ListView(
         children: [
@@ -143,8 +140,8 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                               physics: NeverScrollableScrollPhysics(),
                               children: [
                                 RestaurantMenuTab(
+                                  restaurant: widget.summary,
                                   details: restaurantDetails,
-                                  restaurantName: widget.summary.name,
                                 ),
                                 RestaurantDetailsInfoTab(
                                   restaurant: widget.summary,
@@ -158,15 +155,6 @@ class _RestaurantDetailsViewState extends ConsumerState<RestaurantDetailsView> {
                             ),
                           ),
                         ),
-                        // TODO: consider adding a loading indicator here or not
-                        // if (updatingFavorite)
-                        //   Positioned(
-                        //     bottom: 0,
-                        //     left: 150,
-                        //     child: ThreeDotProgressIndicator(
-                        //       loadingText: '',
-                        //     ),
-                        //   ),
                       ],
                     ),
                   ],

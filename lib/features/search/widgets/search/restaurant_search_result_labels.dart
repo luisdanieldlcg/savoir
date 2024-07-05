@@ -37,6 +37,21 @@ class RestaurantSearchResultLabels extends StatelessWidget {
     if (restaurant.reservable) {
       labels.add("📝");
     }
+
+    for (final type in restaurant.types) {
+      if (type.contains("pizza")) {
+        labels.add("🍕");
+      }
+      if (type.contains("vegan")) {
+        labels.add("🌱");
+      }
+      if (type.contains("chinese")) {
+        labels.add("🥡");
+      }
+      if (type.contains("mexican")) {
+        labels.add("🌮");
+      }
+    }
     if (labels.isEmpty) return SizedBox.shrink();
     return Container(
       decoration: BoxDecoration(

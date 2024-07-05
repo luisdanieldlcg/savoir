@@ -38,8 +38,29 @@ class _RestaurantSearchFiltersState extends ConsumerState<RestaurantSearchFilter
       {
         "name": "Reserva",
         "icon": "📝",
+      },
+      {
+        "name": "Pizza",
+        "icon": "🍕",
+      },
+      {
+        "name": "Vegano",
+        "icon": "🌱",
+      },
+      {
+        "name": "Chino",
+        "icon": "🥡",
+      },
+      {
+        "name": "Mexicano",
+        "icon": "🌮",
+      },
+      {
+        "name": "Americano",
+        "icon": "🍔",
       }
     ];
+
     return Row(
       children: [
         ...filterChoices.map(
@@ -75,7 +96,23 @@ class _RestaurantSearchFiltersState extends ConsumerState<RestaurantSearchFilter
                         case 4:
                           return resturant.servesWine;
                         default:
-                          return true;
+                          for (final type in resturant.types) {
+                            switch (_activeFilter) {
+                              case 5:
+                                return resturant.reservable;
+                              case 6:
+                                return type.contains("pizza");
+                              case 7:
+                                return type.contains("vegan");
+                              case 8:
+                                return type.contains("chinese");
+                              case 9:
+                                return type.contains("mexican");
+                              case 10:
+                                return type.contains("american");
+                            }
+                          }
+                          return false;
                       }
                     });
                   },
