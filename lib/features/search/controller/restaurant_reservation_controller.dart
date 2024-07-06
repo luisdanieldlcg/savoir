@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/database_repository.dart';
 
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/providers.dart';
-import 'package:savoir/common/util.dart';
 
-final reservationFormProvider =
-    StateNotifierProvider.autoDispose<ReservationFormState, ReservationForm>((ref) {
+final reservationFormProvider = StateNotifierProvider<ReservationFormState, ReservationForm>((ref) {
   return ReservationFormState(ref);
 });
 
@@ -17,6 +14,8 @@ class ReservationForm {
   final int durationHours;
   final String instructions;
   final String? restaurantId;
+  final String restaurantName;
+  final String restaurantPhotoUrl;
 
   ReservationForm({
     required this.reservationDate,
@@ -24,6 +23,8 @@ class ReservationForm {
     required this.durationHours,
     required this.instructions,
     required this.restaurantId,
+    required this.restaurantName,
+    required this.restaurantPhotoUrl,
   });
 
   ReservationForm copyWith({
@@ -32,13 +33,17 @@ class ReservationForm {
     int? durationHours,
     String? instrucciones,
     String? restaurantId,
+    String? restaurantName,
+    String? restaurantPhotoUrl,
   }) {
     return ReservationForm(
       reservationDate: reservationDate ?? this.reservationDate,
       numberOfPeople: numberOfPeople ?? this.numberOfPeople,
       durationHours: durationHours ?? this.durationHours,
-      instructions: instrucciones ?? this.instructions,
+      instructions: instrucciones ?? instructions,
       restaurantId: restaurantId ?? this.restaurantId,
+      restaurantName: restaurantName ?? this.restaurantName,
+      restaurantPhotoUrl: restaurantPhotoUrl ?? this.restaurantPhotoUrl,
     );
   }
 
@@ -48,7 +53,9 @@ class ReservationForm {
       'numberOfPeople': numberOfPeople,
       'durationHours': durationHours,
       'instructions': instructions,
-      'restaurantId': restaurantId
+      'restaurantId': restaurantId,
+      'restaurantName': restaurantName,
+      'restaurantPhotoUrl': restaurantPhotoUrl,
     };
   }
 
@@ -59,6 +66,8 @@ class ReservationForm {
       durationHours: map['durationHours'] as int,
       instructions: map['instructions'] as String,
       restaurantId: map['restaurantId'] as String,
+      restaurantName: map['restaurantName'] as String,
+      restaurantPhotoUrl: map['restaurantPhotoUrl'] as String,
     );
   }
 }
@@ -71,12 +80,15 @@ class ReservationFormState extends StateNotifier<ReservationForm> {
             numberOfPeople: 2,
             durationHours: 1,
             instructions: '',
-            restaurantId: ''));
+            restaurantId: '',
+            restaurantName: '',
+            restaurantPhotoUrl: ''));
   static final _logger = AppLogger.getLogger(ReservationFormState);
 
-  void setRestaurantId(String restaurantId) {
-    _logger.i('Setting restaurant id to $restaurantId');
-    state = state.copyWith(restaurantId: restaurantId);
+  void setRestaurantData({required String id, required String name, required String photoUrl}) {
+    _logger.i('State before setting restaurant data: ${state.toMap()}');
+    state = state.copyWith(restaurantId: id, restaurantName: name, restaurantPhotoUrl: photoUrl);
+    _logger.i('State after setting restaurant data: ${state.toMap()}');
   }
 
   void incNumberOfPeople() {
@@ -118,16 +130,32 @@ class ReservationFormState extends StateNotifier<ReservationForm> {
     state = state.copyWith(reservationDate: newDateTime);
   }
 
-  void makeReservation() async {
+  Future<void> makeReservation({
+    required void Function() onSuccess,
+    required void Function() onError,
+  }) async {
     try {
       final user = ref.watch(userProvider);
       if (user == null) {
         return;
       }
+      _logger.i('Making reservation with state: ${state.toMap()}');
+      await ref.read(databaseRepositoryProvider).addReservation(state, user.uid);
+      onSuccess();
 
-      await ref.read(databaseRepositoryProvider).addReservation(state, user!.uid);
+      // reset state
+      // state = ReservationForm(
+      //   reservationDate: DateTime.now(),
+      //   numberOfPeople: 2,
+      //   durationHours: 1,
+      //   instructions: '',
+      //   restaurantId: '',
+      //   restaurantName: '',
+      //   restaurantPhotoUrl: '',
+      // );
     } catch (e) {
-      _logger.e('Error making reservation: $e');
+      _logger.e('Error making reservation: ${e.toString()}');
+      onError();
     }
   }
 }

@@ -15,7 +15,7 @@ class _TableReservationSummaryState extends ConsumerState<TableReservationSummar
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    return true
+    return loading
         ? PulseProgressIndicator()
         : ListView(
             children: [
@@ -83,14 +83,71 @@ class _TableReservationSummaryState extends ConsumerState<TableReservationSummar
 
               // total
               TextButton(
-                onPressed: () {
-                  setState(() {
-                    loading = true;
-                  });
-                  ref.read(reservationFormProvider.notifier).makeReservation();
-                  setState(() {
-                    loading = false;
-                  });
+                onPressed: () async {
+                  setState(() => loading = true);
+                  await ref.read(reservationFormProvider.notifier).makeReservation(
+                        onError: () {},
+                        onSuccess: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Reserva exitosa"),
+                                content: Text("Tu reserva ha sido realizada con éxito"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Ok"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                  setState(() => loading = false);
+                  // Future.delayed(const Duration(seconds: 1), () {
+                  //   ref.read(reservationFormProvider.notifier).makeReservation(
+                  //     () {
+                  //       showDialog(
+                  //           context: context,
+                  //           builder: (context) {
+                  //             return AlertDialog(
+                  //               title: Text("Reserva exitosa"),
+                  //               content: Text("Tu reserva ha sido realizada con éxito"),
+                  //               actions: [
+                  //                 TextButton(
+                  //                     onPressed: () {
+                  //                       Navigator.pop(context);
+                  //                       Navigator.pop(context);
+                  //                     },
+                  //                     child: Text("Ok")),
+                  //               ],
+                  //             );
+                  //           });
+                  //     },
+                  //     () {
+                  //       showDialog(
+                  //           context: context,
+                  //           builder: (context) {
+                  //             return AlertDialog(
+                  //               title: Text("Error"),
+                  //               content: Text("Ocurrió un error al hacer la reserva"),
+                  //               actions: [
+                  //                 TextButton(
+                  //                   onPressed: () => Navigator.pop(context),
+                  //                   child: Text("Cerrar"),
+                  //                 ),
+                  //               ],
+                  //             );
+                  //           });
+                  //     },
+                  //   );
+                  //   setState(() => loading = false);
+                  // });
                 },
                 child: Text(
                   "Reservar por RD\$300.00",

@@ -36,13 +36,25 @@ class DatabaseRepository {
     });
   }
 
-  Future<List<ReservationForm>> readReservations(String userId) {
-    return reservations().doc(userId).get().then((snapshot) {
-      if (snapshot.data() == null) {
-        return <ReservationForm>[];
-      }
-      return snapshot.data()!.reservations;
-    });
+  Future<void> cancelReservation({
+    required String userId,
+    required String restaurantId,
+  }) async {
+    final reservation = await reservations().doc(userId).get();
+    final reservationModel = reservation.data();
+    if (reservationModel == null) {
+      return;
+    }
+    final update = reservationModel.reservations
+        .where((reservation) => reservation.restaurantId != restaurantId)
+        .toList();
+    return reservations().doc(userId).set(
+          reservationModel.copyWith(reservations: update),
+        );
+  }
+
+  Future<ReservationModel> readBookings(String userId) {
+    return reservations().doc(userId).get().then((snapshot) => snapshot.data()!);
   }
 
   Future<UserModel?> readUser(String uid) {

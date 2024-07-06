@@ -7,6 +7,7 @@ import 'package:savoir/common/constants.dart';
 import 'package:savoir/common/logger.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
+import 'package:savoir/features/search/controller/restaurant_reservation_controller.dart';
 import 'package:savoir/features/search/model/place.dart';
 import 'package:savoir/features/search/model/restaurant_details.dart';
 import 'package:savoir/router.dart';
@@ -53,11 +54,19 @@ class RestaurantMenuTab extends ConsumerWidget {
             children: [
               const Spacer(),
               FloatingActionButton.extended(
-                onPressed: () => Navigator.pushNamed(
-                  context,
-                  AppRouter.tableReservation,
-                  arguments: restaurant,
-                ),
+                onPressed: () {
+                  ref.read(reservationFormProvider.notifier).setRestaurantData(
+                        id: restaurant.placeId,
+                        name: restaurant.name,
+                        photoUrl: restaurant.photo,
+                      );
+                  
+                  Navigator.pushNamed(
+                    context,
+                    AppRouter.tableReservation,
+                    arguments: restaurant,
+                  );
+                },
                 label: const Text("Reservar mesa"),
                 icon: const Icon(Icons.calendar_today),
                 backgroundColor: AppTheme.primaryColor,

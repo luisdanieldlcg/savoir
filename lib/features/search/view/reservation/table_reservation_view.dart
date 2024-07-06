@@ -1,34 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:savoir/common/theme.dart';
 import 'package:savoir/features/auth/model/favorite_model.dart';
-import 'package:savoir/features/search/controller/restaurant_reservation_controller.dart';
 import 'package:savoir/features/search/view/reservation/tabs/table_reservation_date_tab.dart';
 import 'package:savoir/features/search/view/reservation/tabs/table_reservation_people_tab.dart';
 import 'package:savoir/features/search/view/reservation/tabs/table_reservation_time_tab.dart';
 import 'package:savoir/features/search/view/reservation/tabs/table_reservation_summary.dart';
 import 'package:savoir/features/search/widgets/reservation/table_reservation_appbar.dart';
 
-class TableReservationView extends ConsumerStatefulWidget {
+class TableReservationView extends StatelessWidget {
   final RestaurantSummary summary;
 
   const TableReservationView({super.key, required this.summary});
 
   @override
-  ConsumerState<TableReservationView> createState() => _TableReservationViewState();
-}
-
-class _TableReservationViewState extends ConsumerState<TableReservationView> {
-  @override
-  void initState() {
-    super.initState();
-    // ref.read(reservationFormProvider.notifier).setRestaurantId(widget.summary.placeId);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TableReservationAppBar(summary: widget.summary),
+      appBar: TableReservationAppBar(summary: summary),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
@@ -42,7 +29,7 @@ class _TableReservationViewState extends ConsumerState<TableReservationView> {
                   style: const TextStyle(fontSize: 24, color: Colors.black),
                   children: [
                     TextSpan(
-                      text: widget.summary.name,
+                      text: summary.name,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],

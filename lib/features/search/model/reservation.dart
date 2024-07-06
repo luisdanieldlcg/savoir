@@ -21,7 +21,7 @@ class ReservationModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'userId': userId,
-      'reservations': reservations.map((x) => x.toMap()).toList(),
+      'reservations': reservations.isEmpty ? [] : reservations.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -29,9 +29,10 @@ class ReservationModel {
     return ReservationModel(
       userId: map['userId'] as String,
       reservations: List<ReservationForm>.from(
-        (map['reservations'] as List<int>).map<ReservationForm>(
-          (x) => ReservationForm.fromMap(x as Map<String, dynamic>),
-        ),
+        map["reservations"] == null
+            ? []
+            : List<ReservationForm>.from(
+                map["reservations"].map((x) => ReservationForm.fromMap(x))),
       ),
     );
   }
