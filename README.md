@@ -5,7 +5,9 @@
 </p>
 
 <p align="center">
-    A restaurant reservation app that allows users to book tables at their favorite restaurants effortlessly.
+<i>
+Savoir is a restaurant reservation app that allows users to book tables at their favorite restaurants. 
+</i>
 </p>
 
 ## Features
@@ -45,7 +47,6 @@ Here are some screenshots of the app.
 | :---------------------------------------------------------: | :---------------------------------------------------------------: | :-------------------------------------------------: |
 | ![Reservations Screen](assets/screenshots/reservations.png) | ![Reservation Screen](assets/screenshots/reservation-details.png) | ![Settings Screen](assets/screenshots/settings.png) |
 |                         Statistics                          |
-|       :---------------------------------------------:       |
 |       ![Search Screen](assets/screenshots/stats.png)        |
 
 ## Getting Started
